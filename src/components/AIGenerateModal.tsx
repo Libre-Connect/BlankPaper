@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { DragEvent, KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { ImagePlus, LoaderCircle, Sparkles, X } from 'lucide-react';
 import { Locale, translate } from '@/utils/locale';
 
@@ -28,11 +28,15 @@ function AIGenerateModalContent({
   onSubmit,
 }: AIGenerateModalContentProps) {
   const tr = (zh: string, en: string) => translate(locale, zh, en);
+  const imageInputBaseID = useId();
   const [title, setTitle] = useState(initialTitle);
   const [prompt, setPrompt] = useState(initialPrompt);
   const [images, setImages] = useState<File[]>([]);
   const [imageInputKey, setImageInputKey] = useState(0);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const remainingSlots = Math.max(0, 4 - images.length);
+  const imageInputID = `${imageInputBaseID}-${imageInputKey}`;
 
   useEffect(() => {
     if (!open) return;
@@ -57,9 +61,13 @@ function AIGenerateModalContent({
     };
   }, [previewUrls]);
 
-  const updateImages = (files: FileList | null) => {
+  const updateImages = (files: FileList | File[] | null) => {
     if (!files || files.length === 0) return;
-    setImages((previous) => [...previous, ...Array.from(files).slice(0, Math.max(0, 4 - previous.length))].slice(0, 4));
+
+    const nextFiles = Array.from(files).filter((file) => file.type.startsWith('image/'));
+    if (nextFiles.length === 0) return;
+
+    setImages((previous) => [...previous, ...nextFiles.slice(0, Math.max(0, 4 - previous.length))].slice(0, 4));
     setImageInputKey((value) => value + 1);
   };
 
@@ -67,6 +75,36 @@ function AIGenerateModalContent({
     setImages((previous) => previous.filter((_, itemIndex) => itemIndex !== index));
     setImageInputKey((value) => value + 1);
   };
+
+  const openFilePicker = () => {
+    if (isGenerating || remainingSlots === 0) return;
+    imageInputRef.current?.click();
+  };
+
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragActive(false);
+    updateImages(event.dataTransfer.files);
+  };
+
+  const handlePaste = (event: ClipboardEvent) => {
+    if (!open) return;
+    updateImages(event.clipboardData?.files || null);
+  };
+
+  const handleUploadAreaKeyDown = (event: KeyboardEvent<HTMLLabelElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    openFilePicker();
+  };
+
+  useEffect(() => {
+    if (!open) return;
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [open]);
 
   return (
     <div
@@ -131,27 +169,51 @@ function AIGenerateModalContent({
           </div>
 
           <div className="flex flex-col gap-4">
-            <div
+            <input
+              key={imageInputKey}
+              ref={imageInputRef}
+              id={imageInputID}
+              type="file"
+              accept="image/*"
+              multiple
+              aria-label={tr('上传图片线索', 'Upload Visual Clues')}
+              disabled={isGenerating || remainingSlots === 0}
+              className="sr-only"
+              onChange={(event) => {
+                updateImages(event.target.files);
+                event.target.value = '';
+              }}
+            />
+            <label
+              htmlFor={imageInputID}
+              tabIndex={isGenerating || remainingSlots === 0 ? -1 : 0}
+              onKeyDown={handleUploadAreaKeyDown}
+              onDragEnter={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (!isGenerating && remainingSlots > 0) setIsDragActive(true);
+              }}
+              onDragOver={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (!isGenerating && remainingSlots > 0) setIsDragActive(true);
+              }}
+              onDragLeave={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                setIsDragActive(false);
+              }}
+              onDrop={handleDrop}
               className={`relative flex flex-col items-center justify-center gap-3 rounded-[24px] border border-dashed px-4 py-5 text-center transition ${
                 isGenerating || remainingSlots === 0
                   ? 'cursor-not-allowed border-black/8 bg-white/55 opacity-70'
-                  : 'cursor-pointer border-black/15 bg-white/75 hover:bg-white/90'
+                  : isDragActive
+                    ? 'cursor-copy border-black/30 bg-white shadow-[0_16px_40px_rgba(0,0,0,0.08)]'
+                    : 'cursor-pointer border-black/15 bg-white/75 hover:bg-white/90'
               }`}
             >
-              <input
-                key={imageInputKey}
-                type="file"
-                accept="image/*"
-                multiple
-                aria-label={tr('上传图片线索', 'Upload Visual Clues')}
-                disabled={isGenerating || remainingSlots === 0}
-                className="absolute inset-0 z-10 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-                onChange={(event) => {
-                  updateImages(event.target.files);
-                  event.target.value = '';
-                }}
-              />
-              <div className="pointer-events-none">
+              <div>
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black text-white">
                   <ImagePlus size={22} />
                 </span>
@@ -169,9 +231,27 @@ function AIGenerateModalContent({
                       'Up to 4 images. Scene photos, screenshots, posters, and object shots are all supported and will be analyzed together.',
                     )}
                   </div>
+                  <div className="mt-2 text-[11px] leading-5 text-neutral-500 md:text-xs">
+                    {tr(
+                      '也可以把图片拖进这里，或直接粘贴截图。',
+                      'You can also drop images here or paste a screenshot directly.',
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  openFilePicker();
+                }}
+                disabled={isGenerating || remainingSlots === 0}
+                className="mt-1 inline-flex items-center justify-center rounded-full border border-black/10 bg-white/90 px-4 py-2 text-[11px] font-medium text-neutral-800 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 md:text-xs"
+              >
+                {tr('选择图片', 'Choose Images')}
+              </button>
+            </label>
 
             <div className="rounded-2xl border border-black/8 bg-white/55 px-4 py-3 text-[11px] leading-5 text-neutral-500 md:text-xs">
               {images.length > 0
