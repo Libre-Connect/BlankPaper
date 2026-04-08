@@ -5,7 +5,14 @@ import { AIResults } from '@/components/AIResults';
 import { AIGenerateModal } from '@/components/AIGenerateModal';
 import { AIGeneratedData, PaperLayoutMode, PaperModuleKey, PaperModuleTransform, WhitepaperEvent, WhitepaperMediaItem, WhitepaperNote } from '@/types';
 import { PenTool, Sparkles, Globe, KeyRound, Send, History, PlusCircle, Palette, Share2, ImagePlus, Mic, Square, Eye, X, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { savePaperToLocal, getPublicPapers, getPapersByCode, getUserPapers, hasPaperInLocal } from '@/utils/paperStorage';
+import {
+  fetchPapersByCode,
+  fetchPublicPapers,
+  fetchUserPapers,
+  getClientAuthorId,
+  savePaperToLocal,
+  savePaperToServer,
+} from '@/utils/paperStorage';
 import { BACKGROUND_EFFECTS } from '@/utils/constants';
 import { prepareImageDataUrl } from '@/utils/imageUpload';
 import { formatDisplayDate, formatDisplayTime } from '@/utils/dateFormat';
@@ -188,7 +195,17 @@ const createBlankGeneratedData = (locale: Locale, seed?: Partial<AIGeneratedData
   model: seed?.model || 'manual',
 });
 
-const createInitialEvent = (locale: Locale): WhitepaperEvent => ({
+const withPaperAuthor = (paper: WhitepaperEvent, authorID: string): WhitepaperEvent => ({
+  ...paper,
+  collaboration: {
+    authorID,
+    isForked: Boolean(paper.collaboration?.isForked),
+    originalEventID: paper.collaboration?.originalEventID,
+    contributors: Array.from(new Set([...(paper.collaboration?.contributors || []), authorID])),
+  },
+});
+
+const createInitialEvent = (locale: Locale, authorID = 'anon-local'): WhitepaperEvent => ({
   id: crypto.randomUUID(),
   title: '',
   originalContent: '',
@@ -196,9 +213,9 @@ const createInitialEvent = (locale: Locale): WhitepaperEvent => ({
   mediaItems: [],
   paperNotes: [],
   collaboration: {
-    authorID: 'user_123',
+    authorID,
     isForked: false,
-    contributors: ['user_123'],
+    contributors: [authorID],
   },
   backgroundEffect: 'none',
   fontScale: 1,
@@ -367,6 +384,7 @@ export default function Home() {
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
   const tr = (zh: string, en: string) => translate(locale, zh, en);
   const [event, setEvent] = useState<WhitepaperEvent>(() => createInitialEvent(locale));
+  const [authorID, setAuthorID] = useState('anon-local');
   const [draft, setDraft] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -390,6 +408,7 @@ export default function Home() {
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const [isToolbarCollapsed, setIsToolbarCollapsed] = useState(false);
   const unlockTimerRef = useRef<number | null>(null);
+  const serverSaveTimerRef = useRef<number | null>(null);
   const toolbarImageInputRef = useRef<HTMLInputElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaChunksRef = useRef<Blob[]>([]);
@@ -403,6 +422,12 @@ export default function Home() {
     if (storedLocale === 'en') {
       setLocale('en');
     }
+  }, []);
+
+  useEffect(() => {
+    const nextAuthorID = getClientAuthorId();
+    setAuthorID(nextAuthorID);
+    setEvent((previous) => withPaperAuthor(previous, nextAuthorID));
   }, []);
 
   useEffect(() => {
@@ -431,6 +456,9 @@ export default function Home() {
       if (unlockTimerRef.current) {
         window.clearTimeout(unlockTimerRef.current);
       }
+      if (serverSaveTimerRef.current) {
+        window.clearTimeout(serverSaveTimerRef.current);
+      }
 
       mediaRecorderRef.current?.stop();
       recordingStreamRef.current?.getTracks().forEach((track) => track.stop());
@@ -444,15 +472,39 @@ export default function Home() {
   }, [showPreviewModal, viewMode]);
 
   useEffect(() => {
-    if (viewMode !== 'write' || isPaperReadOnly || !hasPaperInLocal(event.id)) {
+    if (viewMode !== 'write' || isPaperReadOnly) {
       return;
     }
 
-    savePaperToLocal({
-      ...event,
-      originalContent: draft,
-    });
-  }, [draft, event, isPaperReadOnly, viewMode]);
+    if (!hasStructuredContent(event) && !draft.trim() && !event.title.trim()) {
+      return;
+    }
+
+    const nextPaper = withPaperAuthor(
+      {
+        ...event,
+        originalContent: draft,
+        updatedAt: new Date(),
+      },
+      authorID,
+    );
+
+    savePaperToLocal(nextPaper);
+
+    if (serverSaveTimerRef.current) {
+      window.clearTimeout(serverSaveTimerRef.current);
+    }
+
+    serverSaveTimerRef.current = window.setTimeout(() => {
+      void savePaperToServer(nextPaper).catch(() => undefined);
+    }, 600);
+
+    return () => {
+      if (serverSaveTimerRef.current) {
+        window.clearTimeout(serverSaveTimerRef.current);
+      }
+    };
+  }, [authorID, draft, event, isPaperReadOnly, viewMode]);
 
   const triggerUnlockAnimation = () => {
     if (unlockTimerRef.current) {
@@ -466,13 +518,17 @@ export default function Home() {
     }, 1800);
   };
 
-  const refreshSquarePapers = () => {
-    const allPublicPapers = getPublicPapers().map(hydratePaper);
+  const refreshSquarePapers = async () => {
+    const allPublicPapers = (await fetchPublicPapers()).map((paper) =>
+      ensureStructuredPaper(hydratePaper(paper), locale),
+    );
     setPublicPapers(pickRandomPapers(allPublicPapers));
   };
 
   const openPaper = (paper: WhitepaperEvent, readOnly: boolean) => {
-    const nextPaper = readOnly ? hydratePaper(paper) : ensureStructuredPaper(hydratePaper(paper), locale);
+    const nextPaper = readOnly
+      ? hydratePaper(paper)
+      : withPaperAuthor(ensureStructuredPaper(hydratePaper(paper), locale), authorID);
 
     setEvent(nextPaper);
     setDraft(nextPaper.originalContent);
@@ -781,28 +837,32 @@ export default function Home() {
 
       const generated = result.data as AIGeneratedData;
 
-      setEvent((previous) => ({
-        ...previous,
-        title: generated.headline || payload.title || previous.title || tr('未命名事件', 'Untitled Event'),
-        originalContent: payload.prompt,
-        aiGeneratedData: generated,
-        layoutMode: 'ai',
-        referenceImage: previous.referenceImage,
-        mediaItems: [
-          ...(previous.mediaItems || []),
-          ...payload.images
-            .map((file, index) =>
-              createMediaItem(
-                locale,
-                'image',
-                imageDataUrls[index],
-                file.name,
-                (previous.mediaItems?.length || 0) + index,
+      setEvent((previous) =>
+        withPaperAuthor(
+          {
+            ...previous,
+            title: generated.headline || payload.title || previous.title || tr('未命名事件', 'Untitled Event'),
+            originalContent: payload.prompt,
+            aiGeneratedData: generated,
+            layoutMode: 'ai',
+            referenceImage: previous.referenceImage,
+            mediaItems: [
+              ...(previous.mediaItems || []),
+              ...payload.images.map((file, index) =>
+                createMediaItem(
+                  locale,
+                  'image',
+                  imageDataUrls[index],
+                  file.name,
+                  (previous.mediaItems?.length || 0) + index,
+                ),
               ),
-            ),
-        ],
-        updatedAt: new Date(),
-      }));
+            ],
+            updatedAt: new Date(),
+          },
+          authorID,
+        ),
+      );
       setDraft(payload.prompt);
       setShowAIModal(false);
       setIsPaperReadOnly(false);
@@ -816,34 +876,44 @@ export default function Home() {
     }
   };
 
-  const handlePublish = () => {
-    const finalEvent = {
-      ...event,
-      originalContent: draft,
-      isPublic,
-      secretCode: isPublic ? undefined : secretCode,
-      updatedAt: new Date(),
-    };
+  const handlePublish = async () => {
+    const finalEvent = withPaperAuthor(
+      {
+        ...event,
+        originalContent: draft,
+        isPublic,
+        secretCode: isPublic ? undefined : secretCode.trim() || undefined,
+        updatedAt: new Date(),
+      },
+      authorID,
+    );
 
-    savePaperToLocal(finalEvent);
-    setEvent(finalEvent);
-    setPublishSuccess(true);
+    try {
+      savePaperToLocal(finalEvent);
+      const savedPaper = await savePaperToServer(finalEvent);
+      setEvent(savedPaper);
+      setPublishSuccess(true);
 
-    window.setTimeout(() => {
-      setShowPublishModal(false);
-      setPublishSuccess(false);
+      window.setTimeout(() => {
+        setShowPublishModal(false);
+        setPublishSuccess(false);
 
-      if (isPublic) {
-        handleViewSquare();
-      }
-    }, 1500);
+        if (isPublic) {
+          void handleViewSquare();
+        }
+      }, 1500);
+    } catch (error) {
+      setAiErrorMessage(
+        error instanceof Error ? translateErrorMessage(error.message, locale) : tr('发布失败', 'Failed to publish the paper.'),
+      );
+    }
   };
 
-  const handleViewSquare = () => {
+  const handleViewSquare = async () => {
     setShowBgSelector(false);
     setViewMode('square');
     setIsPaperReadOnly(false);
-    refreshSquarePapers();
+    await refreshSquarePapers();
     setIsFocused(true);
   };
 
@@ -856,21 +926,23 @@ export default function Home() {
     setIsFocused(true);
   };
 
-  const handleSearchCode = () => {
+  const handleSearchCode = async () => {
     if (!searchCode.trim()) return;
-    setSecretPapers(getPapersByCode(searchCode).map(hydratePaper));
+    const papers = await fetchPapersByCode(searchCode.trim());
+    setSecretPapers(papers.map((paper) => ensureStructuredPaper(hydratePaper(paper), locale)));
   };
 
-  const handleViewHistory = () => {
+  const handleViewHistory = async () => {
     setShowBgSelector(false);
     setViewMode('history');
     setIsPaperReadOnly(false);
-    setUserPapers(getUserPapers().map(hydratePaper));
+    const papers = await fetchUserPapers(authorID);
+    setUserPapers(papers.map((paper) => ensureStructuredPaper(hydratePaper(paper), locale)));
     setIsFocused(true);
   };
 
   const handleNewPaper = () => {
-    setEvent(createInitialEvent(locale));
+    setEvent(createInitialEvent(locale, authorID));
     setDraft('');
     setAiErrorMessage(null);
     setViewMode('write');
@@ -881,7 +953,24 @@ export default function Home() {
   };
 
   const handleShareAgain = (paper: WhitepaperEvent) => {
-    const nextPaper = ensureStructuredPaper(hydratePaper(paper), locale);
+    const sourcePaper = ensureStructuredPaper(hydratePaper(paper), locale);
+    const nextPaper = withPaperAuthor(
+      {
+        ...sourcePaper,
+        id: crypto.randomUUID(),
+        isPublic: undefined,
+        secretCode: undefined,
+        collaboration: {
+          authorID,
+          isForked: true,
+          originalEventID: paper.id,
+          contributors: [authorID],
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      authorID,
+    );
     setEvent(nextPaper);
     setDraft(nextPaper.originalContent);
     setShowBgSelector(false);
