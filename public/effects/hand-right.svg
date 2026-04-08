@@ -1,0 +1,41 @@
+<svg width="520" height="360" viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sleeve" x1="520" y1="0" x2="274" y2="206" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#20262D"/>
+      <stop offset="0.55" stop-color="#13181E"/>
+      <stop offset="1" stop-color="#0B0F13"/>
+    </linearGradient>
+    <linearGradient id="cuff" x1="398" y1="108" x2="272" y2="146" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2A323B"/>
+      <stop offset="1" stop-color="#0E1217"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="401" y1="116" x2="120" y2="326" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2CDAF"/>
+      <stop offset="0.48" stop-color="#D9AA87"/>
+      <stop offset="1" stop-color="#B57857"/>
+    </linearGradient>
+    <linearGradient id="skinDark" x1="415" y1="166" x2="244" y2="287" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D39A74"/>
+      <stop offset="1" stop-color="#9F6647"/>
+    </linearGradient>
+    <linearGradient id="nail" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#F7E4DA"/>
+      <stop offset="1" stop-color="#E7C7BA"/>
+    </linearGradient>
+  </defs>
+  <path d="M520 0H332C303 0 277 14 261 39C245 64 241 95 251 124L275 195C284 220 308 238 335 240L466 248C496 250 520 226 520 196V0Z" fill="url(#sleeve)"/>
+  <path d="M432 102C408 92 376 91 348 99L276 121C263 125 254 138 255 152C256 167 267 179 281 181L383 198C402 202 421 196 435 183C447 171 452 154 449 138C446 123 441 112 432 102Z" fill="url(#cuff)"/>
+  <path d="M366 95C344 82 313 75 283 77C259 79 237 88 223 103C211 116 207 132 212 146C218 159 230 168 246 171L306 181C332 186 359 182 380 171C401 160 413 142 411 125C409 112 393 103 366 95Z" fill="url(#skin)"/>
+  <rect x="307" y="32" width="44" height="148" rx="22" transform="rotate(7 307 32)" fill="url(#skin)"/>
+  <rect x="259" y="16" width="46" height="162" rx="23" transform="rotate(2 259 16)" fill="url(#skin)"/>
+  <rect x="210" y="18" width="45" height="156" rx="22.5" transform="rotate(-3 210 18)" fill="url(#skin)"/>
+  <rect x="166" y="28" width="41" height="138" rx="20.5" transform="rotate(-7 166 28)" fill="url(#skin)"/>
+  <path d="M385 155C403 162 417 175 424 193C432 212 430 231 419 246C408 261 388 269 367 267C351 266 338 257 331 243C323 229 324 210 334 193C344 177 363 162 385 155Z" fill="url(#skinDark)"/>
+  <path d="M368 170C383 175 396 186 402 200C409 215 407 230 399 242C392 253 379 259 365 258C353 257 343 250 337 240C331 229 331 215 338 201C346 186 355 176 368 170Z" fill="url(#skin)"/>
+  <path d="M374 141C352 133 324 131 298 135C270 139 246 151 231 171C216 192 212 218 220 241C229 268 253 286 282 292L321 299C358 305 394 291 416 263C437 236 440 197 424 168C413 149 396 139 374 141Z" fill="url(#skin)"/>
+  <path d="M341 150C321 144 294 146 271 155C250 163 234 177 226 195C219 212 221 230 230 245C241 261 259 271 280 273L316 277C338 280 360 272 376 257C392 242 398 222 394 201C390 180 379 164 362 156C356 153 349 151 341 150Z" fill="white" fill-opacity="0.12"/>
+  <ellipse cx="333" cy="166" rx="15" ry="10" transform="rotate(8 333 166)" fill="url(#nail)"/>
+  <ellipse cx="282" cy="152" rx="15" ry="10" transform="rotate(2 282 152)" fill="url(#nail)"/>
+  <ellipse cx="231" cy="153" rx="14" ry="10" transform="rotate(-4 231 153)" fill="url(#nail)"/>
+  <ellipse cx="185" cy="165" rx="13" ry="9" transform="rotate(-8 185 165)" fill="url(#nail)"/>
+</svg>

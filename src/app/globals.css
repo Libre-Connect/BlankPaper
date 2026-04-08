@@ -1,0 +1,1997 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0f1014;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #07080b;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08) 0%, transparent 42%),
+    linear-gradient(180deg, #22242b 0%, #0f1014 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+.whitepaper-handwriting {
+  font-family: var(--font-handwriting), "STKaiti", "KaiTi", cursive;
+  letter-spacing: 0.02em;
+}
+
+.whitepaper-layout-shell {
+  position: relative;
+}
+
+.whitepaper-layout-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.whitepaper-layout-switcher__button {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 0.42rem 0.82rem;
+  font-size: 0.66rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(23, 20, 17, 0.76);
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.whitepaper-layout-switcher__button.is-active {
+  background: rgba(19, 18, 17, 0.96);
+  border-color: rgba(19, 18, 17, 0.96);
+  color: rgba(255, 248, 238, 0.98);
+  transform: translateY(-1px);
+}
+
+.whitepaper-layout-switcher__button.is-disabled {
+  cursor: default;
+  opacity: 0.62;
+}
+
+.whitepaper-layout-main {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.whitepaper-layout-column {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.whitepaper-layout-column--body {
+  gap: 1.75rem;
+}
+
+.whitepaper-layout-column--meta {
+  gap: 1.25rem;
+}
+
+.whitepaper-layout-module {
+  min-width: 0;
+}
+
+.whitepaper-module-shell {
+  position: relative;
+  will-change: transform;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease;
+}
+
+.whitepaper-module-shell--front {
+  z-index: 8;
+}
+
+.whitepaper-module-shell--back {
+  z-index: 1;
+  opacity: 0.94;
+}
+
+.whitepaper-module-shell__inner {
+  position: relative;
+}
+
+.whitepaper-module-shell__controls {
+  margin-bottom: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.whitepaper-module-shell__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.3rem 0.7rem;
+  font-size: 0.68rem;
+  line-height: 1;
+  color: rgba(23, 20, 17, 0.72);
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.whitepaper-module-shell.is-dragging {
+  filter: saturate(1.03) brightness(1.02) drop-shadow(0 18px 26px rgba(0, 0, 0, 0.14));
+  transition-duration: 0ms !important;
+}
+
+.whitepaper-module-shell.is-settling {
+  animation: whitepaperSettlePulse 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.whitepaper-module-guide {
+  position: absolute;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.9;
+  background:
+    linear-gradient(180deg, rgba(46, 94, 201, 0.78) 0%, rgba(88, 164, 255, 0.92) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.66),
+    0 0 18px rgba(85, 145, 255, 0.3);
+}
+
+.whitepaper-module-guide--vertical {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.whitepaper-module-guide--horizontal {
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.whitepaper-layout-module--lead {
+  order: 1;
+}
+
+.whitepaper-layout-module--body {
+  order: 2;
+}
+
+.whitepaper-layout-module--reference {
+  order: 3;
+}
+
+.whitepaper-layout-module--media {
+  order: 4;
+}
+
+.whitepaper-layout-module--fact-cards {
+  order: 1;
+}
+
+.whitepaper-layout-module--timeline {
+  order: 2;
+}
+
+.whitepaper-layout-section--notes {
+  order: 3;
+}
+
+.whitepaper-layout-section--closing {
+  order: 4;
+}
+
+@media (min-width: 768px) {
+  .whitepaper-layout-main.has-aside {
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+    align-items: start;
+  }
+
+  .whitepaper-layout--editorial .whitepaper-layout-main.has-aside {
+    grid-template-columns: minmax(0, 1.22fr) minmax(300px, 0.78fr);
+  }
+
+  .whitepaper-layout--evidence .whitepaper-layout-main.has-aside {
+    grid-template-columns: minmax(280px, 0.98fr) minmax(0, 1.08fr);
+  }
+
+  .whitepaper-layout--timeline .whitepaper-layout-main.has-aside {
+    grid-template-columns: minmax(310px, 0.94fr) minmax(0, 1.08fr);
+  }
+
+  .whitepaper-layout--scrapbook .whitepaper-layout-main.has-aside {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .whitepaper-layout--evidence .whitepaper-layout-column--meta,
+  .whitepaper-layout--timeline .whitepaper-layout-column--meta {
+    order: -1;
+  }
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-module--reference {
+  order: 1;
+  max-width: min(100%, 18rem);
+  margin-left: auto;
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-module--lead {
+  order: 2;
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-module--body {
+  order: 3;
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-module--media {
+  order: 4;
+}
+
+.whitepaper-layout--evidence .whitepaper-layout-module--reference {
+  order: 1;
+  max-width: min(100%, 30rem);
+}
+
+.whitepaper-layout--evidence .whitepaper-layout-module--media {
+  order: 2;
+}
+
+.whitepaper-layout--evidence .whitepaper-layout-module--lead {
+  order: 3;
+}
+
+.whitepaper-layout--evidence .whitepaper-layout-module--body {
+  order: 4;
+}
+
+.whitepaper-layout--evidence .whitepaper-layout-column--meta {
+  gap: 1rem;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--timeline {
+  order: 1;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--fact-cards {
+  order: 2;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--lead {
+  order: 2;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--body {
+  order: 3;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--reference {
+  order: 4;
+  max-width: min(100%, 20rem);
+  margin-left: auto;
+}
+
+.whitepaper-layout--timeline .whitepaper-layout-module--media {
+  order: 5;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--media {
+  order: 1;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--reference {
+  order: 2;
+  max-width: min(100%, 20rem);
+  margin-left: auto;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--lead {
+  order: 3;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--body {
+  order: 4;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--timeline {
+  order: 1;
+}
+
+.whitepaper-layout--scrapbook .whitepaper-layout-module--fact-cards {
+  order: 2;
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-section--closing,
+.whitepaper-layout--timeline .whitepaper-layout-section--closing,
+.whitepaper-layout--scrapbook .whitepaper-layout-section--closing {
+  order: 3;
+}
+
+.whitepaper-layout--editorial .whitepaper-layout-section--notes,
+.whitepaper-layout--timeline .whitepaper-layout-section--notes,
+.whitepaper-layout--scrapbook .whitepaper-layout-section--notes {
+  order: 4;
+}
+
+.whitepaper-result-shell {
+  color: #1b140f;
+}
+
+.whitepaper-reference-figure {
+  position: relative;
+  padding: 14px 14px 18px;
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(250, 244, 233, 0.94) 100%);
+  border: 1px solid rgba(36, 24, 16, 0.08);
+  box-shadow:
+    0 20px 42px -32px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  transform: rotate(-2.2deg);
+  will-change: transform, filter;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms ease, opacity 220ms ease, filter 220ms ease;
+}
+
+.whitepaper-reference-figure--front {
+  z-index: 16;
+}
+
+.whitepaper-reference-figure--back {
+  z-index: 1;
+  opacity: 0.92;
+  box-shadow:
+    0 14px 30px -28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56);
+}
+
+.whitepaper-reference-figure::before,
+.whitepaper-reference-figure::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 86px;
+  height: 18px;
+  background:
+    linear-gradient(180deg, rgba(250, 240, 192, 0.92) 0%, rgba(219, 205, 163, 0.86) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0 5px, rgba(153, 137, 101, 0.08) 5px 10px);
+  border-radius: 4px;
+  opacity: 0.82;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.whitepaper-reference-card {
+  position: relative;
+}
+
+.whitepaper-reference-card::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 54px;
+  height: 54px;
+  pointer-events: none;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  background:
+    linear-gradient(135deg, rgba(242, 233, 214, 0.12) 0%, rgba(222, 211, 189, 0.72) 58%, rgba(164, 149, 128, 0.92) 100%);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.75);
+  opacity: 0.88;
+}
+
+.whitepaper-reference-figure.is-dragging,
+.whitepaper-media.is-dragging,
+.whitepaper-note.is-dragging {
+  filter: saturate(1.04) brightness(1.02) drop-shadow(0 18px 26px rgba(0, 0, 0, 0.16));
+  transition-duration: 0ms !important;
+}
+
+.whitepaper-reference-figure.is-settling,
+.whitepaper-media.is-settling,
+.whitepaper-note.is-settling {
+  animation: whitepaperSettlePulse 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.whitepaper-reference-figure::before {
+  left: 18px;
+  transform: rotate(-6deg);
+}
+
+.whitepaper-reference-figure::after {
+  right: 16px;
+  transform: rotate(7deg);
+}
+
+.whitepaper-note-board {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 244, 0.84) 0%, rgba(248, 241, 231, 0.74) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 18px 42px -34px rgba(0, 0, 0, 0.26);
+}
+
+.whitepaper-media-board {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 244, 0.84) 0%, rgba(248, 241, 231, 0.74) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 18px 42px -34px rgba(0, 0, 0, 0.26);
+}
+
+.whitepaper-note-board::before,
+.whitepaper-media-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(0, 0, 0, 0.055) 0%, transparent 14%),
+    radial-gradient(circle at 84% 26%, rgba(0, 0, 0, 0.045) 0%, transparent 14%),
+    radial-gradient(circle at 28% 78%, rgba(255, 255, 255, 0.28) 0%, transparent 18%),
+    radial-gradient(circle at 74% 82%, rgba(0, 0, 0, 0.038) 0%, transparent 16%);
+  mix-blend-mode: multiply;
+  opacity: 0.78;
+}
+
+.whitepaper-note-board.is-reacting::after,
+.whitepaper-media-board.is-reacting::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  pointer-events: none;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.09) 0%, rgba(0, 0, 0, 0.04) 18%, transparent 42%);
+  mix-blend-mode: multiply;
+  opacity: 0.58;
+}
+
+.whitepaper-media {
+  will-change: transform;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease, box-shadow 220ms ease;
+}
+
+.whitepaper-media--front {
+  z-index: 20;
+}
+
+.whitepaper-media--back {
+  z-index: 4;
+  filter: saturate(0.94) brightness(0.985);
+}
+
+.whitepaper-media__sheet {
+  position: relative;
+  border: 1px solid rgba(48, 33, 19, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(247, 239, 226, 0.96) 100%);
+  box-shadow:
+    0 20px 30px -28px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.whitepaper-media__sheet::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 78px;
+  height: 16px;
+  transform: translateX(-50%) rotate(-3deg);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(246, 233, 197, 0.92) 0%, rgba(219, 203, 160, 0.86) 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  opacity: 0.88;
+}
+
+.whitepaper-media__sheet::after,
+.whitepaper-note__sheet::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  background:
+    linear-gradient(135deg, rgba(255, 251, 240, 0.12) 0%, rgba(227, 214, 193, 0.72) 60%, rgba(175, 160, 138, 0.9) 100%);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.78);
+  opacity: 0.82;
+}
+
+.whitepaper-media__sheet--audio {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(240, 234, 224, 0.98) 100%);
+}
+
+.whitepaper-note {
+  will-change: transform;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease, box-shadow 220ms ease;
+}
+
+.whitepaper-note--front {
+  z-index: 18;
+}
+
+.whitepaper-note--back {
+  z-index: 5;
+  filter: saturate(0.96) brightness(0.98);
+}
+
+.whitepaper-note__sheet {
+  position: relative;
+  border: 1px solid rgba(48, 33, 19, 0.08);
+  box-shadow:
+    0 20px 30px -28px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.whitepaper-note__sheet::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 78px;
+  height: 16px;
+  transform: translateX(-50%) rotate(-4deg);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(246, 233, 197, 0.92) 0%, rgba(219, 203, 160, 0.86) 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  opacity: 0.88;
+}
+
+.whitepaper-note--amber .whitepaper-note__sheet {
+  background:
+    linear-gradient(180deg, rgba(249, 232, 173, 0.98) 0%, rgba(241, 208, 133, 0.94) 100%);
+}
+
+.whitepaper-note--blue .whitepaper-note__sheet {
+  background:
+    linear-gradient(180deg, rgba(207, 229, 247, 0.98) 0%, rgba(176, 211, 236, 0.94) 100%);
+}
+
+.whitepaper-note--charcoal .whitepaper-note__sheet {
+  background:
+    linear-gradient(180deg, rgba(57, 62, 70, 0.96) 0%, rgba(33, 37, 43, 0.94) 100%);
+  color: rgba(255, 249, 240, 0.92);
+}
+
+.whitepaper-note--charcoal .whitepaper-note__sheet textarea,
+.whitepaper-note--charcoal .whitepaper-note__sheet div,
+.whitepaper-note--charcoal .whitepaper-note__sheet .whitepaper-handwriting {
+  color: rgba(255, 249, 240, 0.92) !important;
+}
+
+.whitepaper-note--charcoal .whitepaper-note__sheet textarea::placeholder {
+  color: rgba(255, 249, 240, 0.35) !important;
+}
+
+.whitepaper-unlocking .whitepaper-result-shell {
+  animation: whitepaperInkReveal 1.35s ease forwards;
+}
+
+.whitepaper-unlock-mask {
+  position: absolute;
+  inset: -3% -8%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.whitepaper-unlocking .whitepaper-unlock-mask {
+  opacity: 1;
+  animation: whitepaperWipeSweep 1.5s ease forwards;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.effect-bg-layer,
+.effect-preview-swatch {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.effect-overlay-layer,
+.effect-fg-layer {
+  overflow: visible;
+  isolation: isolate;
+}
+
+.effect-bg-layer {
+  transform: scale(1.04);
+  filter: saturate(1.24) contrast(1.14) brightness(1.02);
+}
+
+.effect-bg-layer,
+.effect-overlay-layer,
+.effect-fg-layer {
+  border-radius: inherit;
+}
+
+.effect-bg-layer::before,
+.effect-bg-layer::after,
+.effect-overlay-layer::before,
+.effect-overlay-layer::after,
+.effect-fg-layer::before,
+.effect-fg-layer::after,
+.effect-preview-swatch::before,
+.effect-preview-swatch::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.effect-preview-swatch::before,
+.effect-preview-swatch::after {
+  inset: 0;
+}
+
+.effect-preview-swatch {
+  position: relative;
+  background-size: cover;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 10px 18px rgba(15, 23, 42, 0.14);
+}
+
+.effect-paper-layer {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 248, 241, 0.98) 100%);
+  color: #111827;
+}
+
+.effect-paper-layer::before,
+.effect-paper-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.effect-paper-layer::before {
+  background:
+    radial-gradient(circle at 15% 18%, rgba(255, 255, 255, 0.8) 0%, transparent 24%),
+    radial-gradient(circle at 84% 12%, rgba(255, 255, 255, 0.55) 0%, transparent 18%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 45%);
+  opacity: 0.9;
+}
+
+.effect-paper-layer::after {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(32, 28, 22, 0.015) 0 1px,
+      transparent 1px 6px
+    );
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+
+.effect-wood .effect-paper-layer::before {
+  opacity: 0.92;
+  background:
+    linear-gradient(90deg, rgba(131, 82, 44, 0.16) 0%, transparent 12%, transparent 88%, rgba(131, 82, 44, 0.16) 100%),
+    linear-gradient(180deg, rgba(255, 234, 205, 0.18) 0%, transparent 20%, transparent 80%, rgba(96, 56, 26, 0.08) 100%);
+}
+
+.effect-marble .effect-paper-layer::before {
+  opacity: 0.95;
+  background:
+    linear-gradient(128deg, transparent 0 24%, rgba(155, 166, 182, 0.18) 25% 26%, transparent 27% 54%, rgba(255, 255, 255, 0.88) 55% 56%, transparent 57% 100%),
+    linear-gradient(40deg, transparent 0 42%, rgba(173, 184, 197, 0.16) 43% 44%, transparent 45% 100%);
+}
+
+.effect-grass .effect-paper-layer::before {
+  opacity: 0.94;
+  background:
+    radial-gradient(circle at 12% 88%, rgba(43, 108, 52, 0.12) 0%, transparent 18%),
+    radial-gradient(circle at 88% 20%, rgba(112, 199, 96, 0.12) 0%, transparent 20%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, transparent 34%);
+}
+
+.effect-desk .effect-paper-layer::before {
+  opacity: 0.9;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 232, 196, 0.22) 0%, transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 20%, transparent 82%, rgba(0, 0, 0, 0.05) 100%);
+}
+
+.effect-concrete .effect-paper-layer::before {
+  opacity: 0.92;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(160, 168, 179, 0.12) 0%, transparent 10%),
+    radial-gradient(circle at 82% 78%, rgba(90, 95, 102, 0.08) 0%, transparent 12%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 26%);
+}
+
+.effect-sand .effect-paper-layer::before {
+  opacity: 0.9;
+  background:
+    linear-gradient(168deg, transparent 0 34%, rgba(236, 205, 150, 0.14) 35% 42%, transparent 44% 100%),
+    radial-gradient(circle at 14% 82%, rgba(210, 171, 110, 0.16) 0%, transparent 20%);
+}
+
+.effect-water-drops .effect-paper-layer::before {
+  opacity: 0.96;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(199, 239, 255, 0.28) 0 2.2%, transparent 4.4%),
+    radial-gradient(circle at 72% 68%, rgba(199, 239, 255, 0.24) 0 2.8%, transparent 5.2%),
+    radial-gradient(circle at 80% 22%, rgba(199, 239, 255, 0.18) 0 1.8%, transparent 3.2%);
+}
+
+.effect-hands .effect-paper-layer,
+.effect-blood .effect-paper-layer,
+.effect-fire .effect-paper-layer,
+.effect-coffee-stain .effect-paper-layer,
+.effect-crumpled .effect-paper-layer {
+  box-shadow:
+    0 26px 70px -18px rgba(0, 0, 0, 0.36),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+@keyframes ambientShift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-2%, -1.5%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes grainDrift {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 0 0, 240px 80px, -180px 120px, 0 0;
+  }
+}
+
+@keyframes causticMove {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  50% {
+    background-position: 35px -18px, -40px 24px, 24px 18px, 0 0;
+  }
+  100% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@keyframes emberRise {
+  0% {
+    transform: translateY(18%) scale(1);
+    opacity: 0.58;
+  }
+  100% {
+    transform: translateY(-18%) scale(1.16);
+    opacity: 0.16;
+  }
+}
+
+@keyframes scanSweep {
+  0% {
+    transform: translateY(-24%);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.38;
+  }
+  82% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(24%);
+    opacity: 0;
+  }
+}
+
+@keyframes starDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-1.8%, -2.4%, 0) scale(1.03);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes chalkFloat {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gripShift {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-0.8%) rotate(0.6deg);
+  }
+  100% {
+    transform: translateY(0.6%) rotate(-0.4deg);
+  }
+}
+
+@keyframes bloodPulseSlow {
+  0%,
+  100% {
+    opacity: 0.84;
+    filter: drop-shadow(0 8px 18px rgba(86, 0, 0, 0.16));
+  }
+  50% {
+    opacity: 0.96;
+    filter: drop-shadow(0 12px 24px rgba(86, 0, 0, 0.24));
+  }
+}
+
+@keyframes dripStretch {
+  0%,
+  100% {
+    transform: rotate(4deg) scaleY(1);
+  }
+  50% {
+    transform: rotate(5deg) scaleY(1.035);
+  }
+}
+
+@keyframes whitepaperSettlePulse {
+  0% {
+    filter: saturate(1.05) brightness(1.03) drop-shadow(0 16px 22px rgba(0, 0, 0, 0.14));
+  }
+  55% {
+    filter: saturate(0.99) brightness(0.995) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.08));
+  }
+  100% {
+    filter: none;
+  }
+}
+
+@keyframes whitepaperInkReveal {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(10px);
+  }
+  45% {
+    opacity: 0.55;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes whitepaperWipeSweep {
+  0% {
+    transform: translate3d(-45%, 0, 0) rotate(-5deg);
+    opacity: 0.95;
+    background:
+      linear-gradient(90deg, rgba(245, 237, 223, 0.96) 0%, rgba(245, 237, 223, 0.96) 24%, rgba(255, 255, 255, 0) 56%),
+      radial-gradient(circle at 16% 34%, rgba(255, 255, 255, 0.78) 0%, transparent 26%),
+      radial-gradient(circle at 26% 68%, rgba(255, 255, 255, 0.68) 0%, transparent 18%),
+      radial-gradient(circle at 38% 48%, rgba(233, 223, 208, 0.7) 0%, transparent 22%);
+    filter: blur(0.8px);
+  }
+  55% {
+    opacity: 0.88;
+  }
+  100% {
+    transform: translate3d(78%, 0, 0) rotate(-2deg);
+    opacity: 0;
+    background:
+      linear-gradient(90deg, rgba(245, 237, 223, 0.78) 0%, rgba(245, 237, 223, 0.52) 18%, rgba(255, 255, 255, 0) 48%),
+      radial-gradient(circle at 18% 30%, rgba(255, 255, 255, 0.62) 0%, transparent 20%),
+      radial-gradient(circle at 28% 68%, rgba(241, 232, 217, 0.58) 0%, transparent 16%);
+    filter: blur(1.2px);
+  }
+}
+
+.effect-hands .effect-bg-layer,
+.effect-preview-swatch.effect-hands {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.86) 0%, transparent 24%),
+    linear-gradient(180deg, #eef2f6 0%, #d0d8e2 100%);
+}
+
+.effect-hands .effect-bg-layer::after,
+.effect-preview-swatch.effect-hands::after {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 18% 78%, rgba(111, 120, 131, 0.14) 0%, transparent 24%),
+    radial-gradient(circle at 82% 82%, rgba(111, 120, 131, 0.12) 0%, transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36) 0%, transparent 40%);
+}
+
+.effect-hands .effect-overlay-layer {
+  box-shadow:
+    inset 0 34px 64px rgba(255, 255, 255, 0.32),
+    inset 0 -22px 46px rgba(0, 0, 0, 0.08);
+}
+
+.effect-hands .effect-overlay-layer::before,
+.effect-hands .effect-overlay-layer::after {
+  inset: auto;
+  top: 7.5%;
+  width: 12%;
+  height: 10%;
+  opacity: 1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, rgba(98, 63, 34, 0.18) 0%, rgba(98, 63, 34, 0.12) 42%, transparent 74%);
+  filter: blur(9px);
+}
+
+.effect-hands .effect-overlay-layer::before {
+  left: 7%;
+  transform: rotate(-8deg);
+}
+
+.effect-hands .effect-overlay-layer::after {
+  right: 7%;
+  transform: rotate(8deg);
+}
+
+.effect-hands .effect-paper-layer::after {
+  opacity: 0.38;
+  background:
+    radial-gradient(circle at 8% 9%, rgba(0, 0, 0, 0.05) 0%, transparent 13%),
+    radial-gradient(circle at 92% 9%, rgba(0, 0, 0, 0.05) 0%, transparent 13%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.015) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+}
+
+.effect-hands .effect-fg-layer::before,
+.effect-hands .effect-fg-layer::after {
+  inset: auto;
+  opacity: 1;
+  width: 20%;
+  height: 26%;
+  top: -3.8%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: contain;
+}
+
+.effect-hands .effect-fg-layer::before {
+  left: -3.2%;
+  background-image: url("/effects/hand-left.svg");
+  transform: rotate(-2deg);
+  filter: drop-shadow(4px 16px 18px rgba(74, 49, 28, 0.2));
+  animation: gripShift 6.2s ease-in-out infinite;
+}
+
+.effect-hands .effect-fg-layer::after {
+  right: -3.2%;
+  background-image: url("/effects/hand-right.svg");
+  transform: rotate(2deg);
+  filter: drop-shadow(-4px 16px 18px rgba(74, 49, 28, 0.2));
+  animation: gripShift 6.6s ease-in-out infinite reverse;
+}
+
+.effect-blood .effect-bg-layer,
+.effect-preview-swatch.effect-blood {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(191, 26, 47, 0.24) 0%, transparent 20%),
+    radial-gradient(circle at 82% 24%, rgba(110, 0, 20, 0.22) 0%, transparent 24%),
+    linear-gradient(145deg, #26080b 0%, #120709 42%, #050304 100%);
+}
+
+.effect-blood .effect-bg-layer::before,
+.effect-preview-swatch.effect-blood::before {
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 12% 82%, rgba(255, 72, 72, 0.28) 0%, transparent 16%),
+    radial-gradient(circle at 88% 78%, rgba(255, 72, 72, 0.26) 0%, transparent 18%),
+    radial-gradient(circle at 52% 14%, rgba(255, 180, 180, 0.16) 0%, transparent 14%);
+  animation: pulseGlow 5s ease-in-out infinite;
+}
+
+.effect-blood .effect-overlay-layer::after {
+  opacity: 1;
+  inset: auto;
+  left: 30%;
+  bottom: -9%;
+  width: 30%;
+  height: 24%;
+  background:
+    url("/effects/blood.svg") center bottom / contain no-repeat;
+  transform: rotate(4deg);
+  mix-blend-mode: multiply;
+  animation: bloodPulseSlow 6.8s ease-in-out infinite, dripStretch 7.4s ease-in-out infinite;
+}
+
+.effect-blood .effect-overlay-layer::before {
+  inset: auto;
+  left: -7%;
+  top: -8%;
+  width: 38%;
+  height: 30%;
+  opacity: 0.88;
+  background: url("/effects/blood.svg") center center / contain no-repeat;
+  transform: rotate(-12deg);
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 8px 18px rgba(86, 0, 0, 0.16));
+  animation: bloodPulseSlow 6.2s ease-in-out infinite;
+}
+
+.effect-blood .effect-fg-layer::before {
+  inset: auto;
+  right: -6%;
+  top: -10%;
+  width: 34%;
+  height: 28%;
+  opacity: 0.78;
+  background: url("/effects/blood.svg") center center / contain no-repeat;
+  transform: rotate(17deg) scaleX(-1);
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 8px 18px rgba(86, 0, 0, 0.14));
+  animation: bloodPulseSlow 7.1s ease-in-out infinite;
+}
+
+.effect-blood .effect-paper-layer::before {
+  opacity: 0.92;
+  background:
+    radial-gradient(circle at 11% 12%, rgba(133, 0, 0, 0.1) 0%, transparent 12%),
+    radial-gradient(circle at 88% 14%, rgba(133, 0, 0, 0.08) 0%, transparent 10%),
+    radial-gradient(circle at 54% 93%, rgba(133, 0, 0, 0.08) 0%, transparent 11%),
+    linear-gradient(180deg, rgba(80, 0, 0, 0.04) 0%, transparent 16%, transparent 84%, rgba(80, 0, 0, 0.04) 100%);
+  mix-blend-mode: multiply;
+}
+
+.effect-wood .effect-bg-layer,
+.effect-preview-swatch.effect-wood {
+  background:
+    linear-gradient(90deg, rgba(62, 34, 18, 0.98) 0%, rgba(122, 80, 46, 0.95) 16%, rgba(79, 48, 26, 0.96) 34%, rgba(137, 90, 55, 0.95) 58%, rgba(58, 31, 18, 0.98) 100%),
+    repeating-linear-gradient(94deg, rgba(255, 210, 160, 0.06) 0 2px, transparent 2px 16px, rgba(41, 20, 8, 0.16) 16px 18px, transparent 18px 36px);
+  background-size: 100% 100%, 180% 140%;
+  animation: grainDrift 26s linear infinite;
+}
+
+.effect-wood .effect-bg-layer::before,
+.effect-preview-swatch.effect-wood::before {
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.08) 0%, transparent 28%),
+    radial-gradient(circle at 72% 84%, rgba(0, 0, 0, 0.16) 0%, transparent 32%);
+}
+
+.effect-wood .effect-bg-layer::after,
+.effect-preview-swatch.effect-wood::after {
+  opacity: 0.86;
+  background:
+    radial-gradient(circle at 18% 46%, transparent 0 5%, rgba(69, 38, 19, 0.66) 5.4% 10.2%, rgba(168, 114, 72, 0.22) 10.8% 12.8%, transparent 13.6% 22%),
+    radial-gradient(circle at 76% 68%, transparent 0 4.4%, rgba(58, 31, 17, 0.62) 4.8% 9.6%, rgba(180, 124, 78, 0.18) 10.2% 12.4%, transparent 13.2% 20%),
+    repeating-linear-gradient(96deg, rgba(255, 223, 184, 0.1) 0 1px, rgba(96, 58, 30, 0.26) 1px 3px, transparent 3px 11px, rgba(40, 20, 8, 0.24) 11px 13px, transparent 13px 26px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.16) 100%);
+  mix-blend-mode: multiply;
+}
+
+.effect-wood .effect-paper-layer::after {
+  opacity: 0.42;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 219, 0.08) 0%, transparent 16%, transparent 82%, rgba(88, 53, 29, 0.08) 100%),
+    radial-gradient(circle at 8% 24%, rgba(81, 50, 25, 0.1) 0%, transparent 14%),
+    radial-gradient(circle at 92% 78%, rgba(81, 50, 25, 0.08) 0%, transparent 16%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.015) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+}
+
+.effect-marble .effect-bg-layer,
+.effect-preview-swatch.effect-marble {
+  background:
+    linear-gradient(135deg, #eef1f4 0%, #d7dade 100%),
+    repeating-linear-gradient(118deg, transparent 0 46px, rgba(115, 126, 145, 0.16) 46px 48px, transparent 48px 92px),
+    repeating-linear-gradient(24deg, transparent 0 60px, rgba(255, 255, 255, 0.8) 60px 62px, transparent 62px 120px);
+  background-size: 100% 100%, 220% 220%, 220% 220%;
+  animation: grainDrift 34s linear infinite;
+}
+
+.effect-marble .effect-bg-layer::before,
+.effect-preview-swatch.effect-marble::before {
+  opacity: 0.58;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.5) 0%, transparent 24%),
+    radial-gradient(circle at 84% 74%, rgba(255, 255, 255, 0.34) 0%, transparent 20%);
+}
+
+.effect-marble .effect-bg-layer::after,
+.effect-preview-swatch.effect-marble::after {
+  opacity: 0.84;
+  background:
+    linear-gradient(122deg, transparent 0 16%, rgba(112, 121, 136, 0.42) 16.4% 17.2%, transparent 18% 34%, rgba(255, 255, 255, 0.82) 34.4% 35.2%, transparent 36% 56%, rgba(129, 138, 149, 0.34) 56.4% 57%, transparent 57.8% 100%),
+    linear-gradient(28deg, transparent 0 22%, rgba(149, 158, 172, 0.3) 22.4% 23.1%, transparent 23.8% 48%, rgba(255, 255, 255, 0.68) 48.4% 49.1%, transparent 49.8% 100%),
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.3) 0%, transparent 18%),
+    radial-gradient(circle at 82% 76%, rgba(167, 177, 190, 0.16) 0%, transparent 20%);
+  filter: blur(0.3px);
+}
+
+.effect-marble .effect-paper-layer::after {
+  opacity: 0.38;
+  background:
+    linear-gradient(132deg, transparent 0 22%, rgba(151, 160, 175, 0.14) 22.4% 23.2%, transparent 24% 100%),
+    linear-gradient(44deg, transparent 0 62%, rgba(255, 255, 255, 0.72) 62.4% 63%, transparent 63.6% 100%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.012) 0 1px, transparent 1px 6px);
+}
+
+.effect-grass .effect-bg-layer,
+.effect-preview-swatch.effect-grass {
+  background:
+    radial-gradient(circle at 16% 18%, rgba(166, 255, 120, 0.22) 0%, transparent 18%),
+    radial-gradient(circle at 82% 26%, rgba(36, 139, 43, 0.32) 0%, transparent 22%),
+    linear-gradient(125deg, #1f5e23 0%, #12381a 100%);
+}
+
+.effect-grass .effect-bg-layer::before,
+.effect-preview-swatch.effect-grass::before {
+  opacity: 0.92;
+  background:
+    repeating-linear-gradient(112deg, rgba(77, 162, 72, 0.18) 0 4px, rgba(26, 89, 34, 0.22) 4px 10px, transparent 10px 16px),
+    repeating-linear-gradient(68deg, rgba(112, 199, 96, 0.12) 0 3px, transparent 3px 14px);
+  animation: ambientShift 15s ease-in-out infinite;
+}
+
+.effect-grass .effect-bg-layer::after,
+.effect-preview-swatch.effect-grass::after {
+  opacity: 0.94;
+  background:
+    linear-gradient(82deg, transparent 0 44%, rgba(118, 211, 90, 0.24) 45% 47%, transparent 48% 100%),
+    repeating-linear-gradient(104deg, rgba(97, 182, 82, 0.22) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(76deg, rgba(13, 57, 18, 0.26) 0 1px, transparent 1px 12px),
+    radial-gradient(circle at 18% 78%, rgba(255, 223, 116, 0.08) 0%, transparent 16%);
+  animation: ambientShift 11s ease-in-out infinite reverse;
+}
+
+.effect-grass .effect-paper-layer::after {
+  opacity: 0.44;
+  background:
+    radial-gradient(circle at 8% 92%, rgba(22, 76, 33, 0.12) 0%, transparent 14%),
+    radial-gradient(circle at 92% 90%, rgba(22, 76, 33, 0.12) 0%, transparent 14%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.015) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+}
+
+.effect-desk .effect-bg-layer,
+.effect-preview-swatch.effect-desk {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 233, 191, 0.14) 0%, transparent 28%),
+    linear-gradient(180deg, #34363d 0%, #1f2024 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 16px);
+}
+
+.effect-desk .effect-bg-layer::before,
+.effect-preview-swatch.effect-desk::before {
+  opacity: 0.74;
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0%, transparent 18% 82%, rgba(0, 0, 0, 0.14) 100%),
+    radial-gradient(circle at 18% 84%, rgba(0, 0, 0, 0.18) 0%, transparent 18%);
+}
+
+.effect-desk .effect-bg-layer::after,
+.effect-preview-swatch.effect-desk::after {
+  opacity: 0.88;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 232, 184, 0.18) 0%, transparent 20%),
+    linear-gradient(180deg, transparent 0 80%, rgba(0, 0, 0, 0.26) 100%),
+    linear-gradient(90deg, transparent 0 7%, rgba(0, 0, 0, 0.14) 8% 13%, transparent 14% 86%, rgba(0, 0, 0, 0.14) 87% 92%, transparent 93% 100%),
+    linear-gradient(180deg, transparent 0 74%, rgba(255, 255, 255, 0.04) 74% 76%, transparent 76% 100%);
+}
+
+.effect-desk .effect-paper-layer::after {
+  opacity: 0.42;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 221, 171, 0.22) 0%, transparent 18%),
+    linear-gradient(180deg, transparent 0 78%, rgba(0, 0, 0, 0.06) 100%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.015) 0 1px, transparent 1px 6px);
+}
+
+.effect-concrete .effect-bg-layer,
+.effect-preview-swatch.effect-concrete {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.1) 0%, transparent 14%),
+    linear-gradient(145deg, #9197a0 0%, #70757d 100%);
+}
+
+.effect-concrete .effect-bg-layer::before,
+.effect-preview-swatch.effect-concrete::before {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.14) 0 0.8%, transparent 1.2%),
+    radial-gradient(circle at 68% 26%, rgba(0, 0, 0, 0.14) 0 1%, transparent 1.4%),
+    radial-gradient(circle at 82% 72%, rgba(0, 0, 0, 0.12) 0 1.1%, transparent 1.6%),
+    radial-gradient(circle at 26% 78%, rgba(255, 255, 255, 0.12) 0 0.8%, transparent 1.3%);
+  background-size: 120px 120px, 160px 160px, 180px 180px, 140px 140px;
+}
+
+.effect-concrete .effect-bg-layer::after,
+.effect-preview-swatch.effect-concrete::after {
+  opacity: 0.84;
+  background:
+    linear-gradient(128deg, transparent 0 28%, rgba(84, 88, 95, 0.42) 28.4% 29%, transparent 29.6% 100%),
+    linear-gradient(36deg, transparent 0 58%, rgba(255, 255, 255, 0.2) 58.4% 59%, transparent 59.6% 100%),
+    linear-gradient(164deg, transparent 0 70%, rgba(95, 99, 106, 0.3) 70.4% 71%, transparent 71.6% 100%),
+    radial-gradient(circle at 22% 74%, rgba(86, 92, 98, 0.2) 0 1.2%, transparent 1.8%),
+    radial-gradient(circle at 78% 28%, rgba(255, 255, 255, 0.12) 0 1%, transparent 1.6%);
+  mix-blend-mode: multiply;
+}
+
+.effect-concrete .effect-paper-layer::after {
+  opacity: 0.48;
+  background:
+    linear-gradient(132deg, transparent 0 48%, rgba(86, 90, 96, 0.16) 48.4% 49%, transparent 49.6% 100%),
+    radial-gradient(circle at 12% 84%, rgba(130, 136, 144, 0.14) 0%, transparent 10%),
+    radial-gradient(circle at 88% 20%, rgba(130, 136, 144, 0.1) 0%, transparent 10%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.014) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+}
+
+.effect-sand .effect-bg-layer,
+.effect-preview-swatch.effect-sand {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 248, 209, 0.18) 0%, transparent 22%),
+    linear-gradient(180deg, #e0bf83 0%, #b9824f 100%);
+}
+
+.effect-sand .effect-bg-layer::before,
+.effect-preview-swatch.effect-sand::before {
+  opacity: 0.94;
+  background:
+    repeating-linear-gradient(170deg, rgba(255, 233, 189, 0.18) 0 4px, transparent 4px 24px),
+    repeating-linear-gradient(8deg, rgba(166, 115, 61, 0.14) 0 2px, transparent 2px 16px),
+    radial-gradient(circle at 18% 74%, rgba(255, 255, 255, 0.16) 0%, transparent 20%);
+  animation: ambientShift 20s ease-in-out infinite;
+}
+
+.effect-sand .effect-bg-layer::after,
+.effect-preview-swatch.effect-sand::after {
+  opacity: 0.92;
+  background:
+    repeating-linear-gradient(176deg, rgba(255, 236, 194, 0.14) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(12deg, rgba(170, 119, 69, 0.14) 0 1px, transparent 1px 10px),
+    radial-gradient(circle at 20% 78%, rgba(255, 246, 219, 0.26) 0 1.1%, transparent 1.8%),
+    radial-gradient(circle at 64% 62%, rgba(180, 124, 72, 0.18) 0 0.9%, transparent 1.5%),
+    radial-gradient(circle at 84% 34%, rgba(255, 247, 221, 0.22) 0 1.1%, transparent 1.7%);
+  background-size: 120% 120%, 100% 100%, 140px 140px, 170px 170px, 150px 150px;
+}
+
+.effect-sand .effect-overlay-layer::before {
+  inset: auto;
+  left: -2%;
+  right: -2%;
+  bottom: -1%;
+  height: 14%;
+  opacity: 0.82;
+  background:
+    radial-gradient(circle at 6% 72%, rgba(214, 170, 105, 0.58) 0 1.2%, transparent 1.9%),
+    radial-gradient(circle at 12% 80%, rgba(201, 160, 100, 0.44) 0 0.9%, transparent 1.6%),
+    radial-gradient(circle at 28% 76%, rgba(214, 170, 105, 0.48) 0 1.1%, transparent 1.8%),
+    radial-gradient(circle at 46% 82%, rgba(201, 160, 100, 0.46) 0 1%, transparent 1.7%),
+    radial-gradient(circle at 68% 76%, rgba(214, 170, 105, 0.5) 0 1.2%, transparent 1.9%),
+    radial-gradient(circle at 84% 82%, rgba(201, 160, 100, 0.44) 0 1%, transparent 1.6%),
+    linear-gradient(180deg, rgba(241, 206, 150, 0.12) 0%, transparent 100%);
+  mix-blend-mode: multiply;
+}
+
+.effect-water-drops .effect-bg-layer,
+.effect-preview-swatch.effect-water-drops {
+  background:
+    radial-gradient(circle at 24% 26%, rgba(120, 220, 255, 0.28) 0%, transparent 14%),
+    radial-gradient(circle at 72% 64%, rgba(120, 220, 255, 0.16) 0%, transparent 18%),
+    linear-gradient(145deg, #0f6ea3 0%, #042341 100%);
+}
+
+.effect-water-drops .effect-bg-layer::before,
+.effect-preview-swatch.effect-water-drops::before {
+  opacity: 0.86;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.42) 0 2%, transparent 5%),
+    radial-gradient(circle at 65% 30%, rgba(255, 255, 255, 0.28) 0 2.4%, transparent 5.8%),
+    radial-gradient(circle at 72% 72%, rgba(255, 255, 255, 0.2) 0 2.2%, transparent 6%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.06) 0%, transparent 40%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+  background-size: 160px 160px, 220px 220px, 200px 200px, 100% 100%;
+  animation: causticMove 9s ease-in-out infinite;
+}
+
+.effect-water-drops .effect-overlay-layer::before {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.78) 0 1.1%, rgba(191, 234, 255, 0.42) 1.8% 4.6%, transparent 6.2%),
+    radial-gradient(circle at 36% 64%, rgba(255, 255, 255, 0.72) 0 1.4%, rgba(179, 228, 255, 0.36) 2.2% 5.8%, transparent 7.4%),
+    radial-gradient(circle at 62% 32%, rgba(255, 255, 255, 0.66) 0 1.1%, rgba(191, 234, 255, 0.32) 1.8% 4.2%, transparent 5.6%),
+    radial-gradient(circle at 78% 74%, rgba(255, 255, 255, 0.76) 0 1.6%, rgba(179, 228, 255, 0.38) 2.3% 6.2%, transparent 7.8%),
+    radial-gradient(circle at 84% 20%, rgba(255, 255, 255, 0.64) 0 0.8%, rgba(191, 234, 255, 0.3) 1.6% 3.4%, transparent 4.8%);
+  filter: drop-shadow(0 10px 10px rgba(19, 76, 114, 0.08));
+  animation: causticMove 10s ease-in-out infinite;
+}
+
+.effect-water-drops .effect-overlay-layer::after {
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(14, 54, 82, 0.1) 0 4.8%, transparent 6.4%),
+    radial-gradient(circle at 36% 64%, rgba(14, 54, 82, 0.08) 0 5.6%, transparent 7.2%),
+    radial-gradient(circle at 62% 32%, rgba(14, 54, 82, 0.1) 0 4.2%, transparent 5.8%),
+    radial-gradient(circle at 78% 74%, rgba(14, 54, 82, 0.08) 0 6.1%, transparent 7.8%),
+    linear-gradient(110deg, transparent 0 44%, rgba(255, 255, 255, 0.07) 46% 48%, transparent 50% 100%);
+  mix-blend-mode: multiply;
+}
+
+.effect-fire .effect-bg-layer,
+.effect-preview-swatch.effect-fire {
+  background:
+    radial-gradient(circle at 50% 100%, rgba(255, 136, 30, 0.42) 0%, transparent 34%),
+    linear-gradient(180deg, #130407 0%, #270507 34%, #4f1809 74%, #140204 100%);
+}
+
+.effect-fire .effect-bg-layer::before,
+.effect-preview-swatch.effect-fire::before {
+  opacity: 0.96;
+  background:
+    radial-gradient(circle at 18% 108%, rgba(255, 170, 88, 0.44) 0%, transparent 24%),
+    radial-gradient(circle at 50% 112%, rgba(255, 96, 0, 0.42) 0%, transparent 28%),
+    radial-gradient(circle at 82% 108%, rgba(255, 196, 112, 0.34) 0%, transparent 24%);
+  animation: emberRise 8s linear infinite;
+}
+
+.effect-fire .effect-bg-layer::after,
+.effect-preview-swatch.effect-fire::after {
+  opacity: 0.42;
+  background:
+    radial-gradient(circle at 20% 84%, rgba(255, 220, 180, 0.26) 0 1.2%, transparent 2%),
+    radial-gradient(circle at 54% 68%, rgba(255, 210, 120, 0.22) 0 1.3%, transparent 2.2%),
+    radial-gradient(circle at 78% 82%, rgba(255, 210, 120, 0.18) 0 1%, transparent 1.8%);
+  background-size: 160px 160px, 220px 220px, 200px 200px;
+}
+
+.effect-fire .effect-overlay-layer {
+  box-shadow:
+    inset 0 -44px 90px rgba(0, 0, 0, 0.46),
+    inset 0 -8px 28px rgba(255, 96, 0, 0.18);
+}
+
+.effect-fire .effect-paper-layer::before {
+  opacity: 0.9;
+  background:
+    radial-gradient(circle at 22% 100%, rgba(255, 185, 96, 0.24) 0%, transparent 16%),
+    radial-gradient(circle at 54% 100%, rgba(255, 110, 10, 0.22) 0%, transparent 20%),
+    radial-gradient(circle at 82% 100%, rgba(255, 195, 100, 0.18) 0%, transparent 14%);
+}
+
+.effect-fire .effect-fg-layer::before {
+  inset: auto;
+  left: -4%;
+  right: -4%;
+  bottom: -3%;
+  height: 24%;
+  opacity: 0.96;
+  background:
+    radial-gradient(ellipse at 8% 100%, rgba(255, 190, 96, 0.78) 0 14%, transparent 15.5%),
+    radial-gradient(ellipse at 18% 100%, rgba(255, 104, 0, 0.94) 0 18%, transparent 19.5%),
+    radial-gradient(ellipse at 32% 100%, rgba(255, 186, 96, 0.72) 0 14%, transparent 15.2%),
+    radial-gradient(ellipse at 46% 100%, rgba(255, 92, 0, 0.96) 0 20%, transparent 21.2%),
+    radial-gradient(ellipse at 62% 100%, rgba(255, 186, 96, 0.72) 0 14%, transparent 15.2%),
+    radial-gradient(ellipse at 76% 100%, rgba(255, 112, 0, 0.94) 0 18%, transparent 19.4%),
+    radial-gradient(ellipse at 90% 100%, rgba(255, 196, 112, 0.72) 0 14%, transparent 15.2%);
+  filter: blur(4px);
+  animation: emberRise 5.8s ease-in-out infinite;
+}
+
+.effect-fire .effect-fg-layer::after {
+  inset: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8%;
+  opacity: 0.46;
+  background: linear-gradient(180deg, transparent 0%, rgba(44, 8, 0, 0.34) 100%);
+}
+
+.effect-fire .effect-paper-layer::after {
+  opacity: 0.52;
+  background:
+    linear-gradient(180deg, transparent 0 78%, rgba(71, 14, 0, 0.08) 100%),
+    radial-gradient(circle at 16% 100%, rgba(255, 173, 92, 0.12) 0%, transparent 16%),
+    radial-gradient(circle at 84% 100%, rgba(255, 173, 92, 0.12) 0%, transparent 16%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.015) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+}
+
+.effect-ice .effect-bg-layer,
+.effect-preview-swatch.effect-ice {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.44) 0%, transparent 16%),
+    linear-gradient(145deg, #f1fdff 0%, #bad9e3 100%);
+}
+
+.effect-ice .effect-bg-layer::before,
+.effect-preview-swatch.effect-ice::before {
+  opacity: 0.9;
+  background:
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.34) 0 2px, transparent 2px 26px),
+    repeating-linear-gradient(38deg, rgba(173, 218, 231, 0.3) 0 1px, transparent 1px 22px),
+    radial-gradient(circle at 76% 74%, rgba(255, 255, 255, 0.44) 0%, transparent 20%);
+}
+
+.effect-ice .effect-paper-layer::before {
+  opacity: 0.92;
+  background:
+    linear-gradient(132deg, transparent 0 44%, rgba(220, 244, 252, 0.62) 45% 46%, transparent 47% 100%),
+    linear-gradient(42deg, transparent 0 60%, rgba(185, 227, 241, 0.58) 61% 62%, transparent 63% 100%);
+}
+
+.effect-ice .effect-bg-layer::after,
+.effect-preview-swatch.effect-ice::after {
+  opacity: 0.8;
+  background:
+    linear-gradient(134deg, transparent 0 18%, rgba(255, 255, 255, 0.76) 18.4% 19%, transparent 19.6% 100%),
+    linear-gradient(42deg, transparent 0 34%, rgba(193, 229, 241, 0.72) 34.4% 35%, transparent 35.6% 100%),
+    linear-gradient(154deg, transparent 0 64%, rgba(255, 255, 255, 0.6) 64.4% 65%, transparent 65.6% 100%);
+}
+
+.effect-ice .effect-overlay-layer::before {
+  opacity: 0.82;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, transparent 8%, transparent 92%, rgba(193, 229, 241, 0.26) 100%),
+    radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.4) 0 16%, transparent 42%),
+    radial-gradient(circle at 100% 0, rgba(255, 255, 255, 0.34) 0 16%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(193, 229, 241, 0.22) 0 18%, transparent 42%),
+    radial-gradient(circle at 0 100%, rgba(193, 229, 241, 0.22) 0 18%, transparent 42%);
+  mix-blend-mode: screen;
+}
+
+.effect-ice .effect-paper-layer::after {
+  opacity: 0.54;
+  background:
+    linear-gradient(136deg, transparent 0 16%, rgba(255, 255, 255, 0.74) 16.4% 17%, transparent 17.6% 100%),
+    linear-gradient(42deg, transparent 0 68%, rgba(178, 218, 232, 0.58) 68.4% 69%, transparent 69.6% 100%),
+    radial-gradient(circle at 10% 12%, rgba(255, 255, 255, 0.22) 0%, transparent 16%),
+    repeating-linear-gradient(0deg, rgba(32, 28, 22, 0.012) 0 1px, transparent 1px 6px);
+}
+
+.effect-neon .effect-bg-layer,
+.effect-preview-swatch.effect-neon {
+  background:
+    radial-gradient(circle at 18% 26%, rgba(255, 0, 122, 0.22) 0%, transparent 20%),
+    radial-gradient(circle at 84% 68%, rgba(0, 255, 240, 0.18) 0%, transparent 26%),
+    linear-gradient(180deg, #020307 0%, #0a0d14 100%);
+}
+
+.effect-neon .effect-bg-layer::before,
+.effect-preview-swatch.effect-neon::before {
+  opacity: 0.82;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 18px),
+    linear-gradient(120deg, transparent 26%, rgba(0, 255, 240, 0.16) 42%, transparent 58%, rgba(255, 0, 122, 0.16) 72%, transparent 84%);
+}
+
+.effect-neon .effect-bg-layer::after,
+.effect-preview-swatch.effect-neon::after {
+  opacity: 0.62;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(0, 255, 240, 0.2) 26%, transparent 48%, rgba(255, 0, 122, 0.18) 72%, transparent 100%);
+  animation: pulseGlow 4.2s ease-in-out infinite;
+}
+
+.effect-neon .effect-paper-layer::before {
+  opacity: 0.92;
+  background:
+    linear-gradient(90deg, rgba(0, 255, 240, 0.08) 0%, transparent 16%, transparent 84%, rgba(255, 0, 122, 0.08) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 18%);
+}
+
+.effect-neon .effect-paper-layer {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 0 36px rgba(0, 255, 240, 0.16),
+    0 0 52px rgba(255, 0, 122, 0.12);
+}
+
+.effect-space .effect-bg-layer,
+.effect-preview-swatch.effect-space {
+  background:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.98) 98%, transparent 100%),
+    radial-gradient(1.4px 1.4px at 62% 22%, rgba(255, 255, 255, 0.8) 98%, transparent 100%),
+    radial-gradient(1px 1px at 78% 72%, rgba(255, 255, 255, 0.9) 98%, transparent 100%),
+    radial-gradient(circle at 26% 28%, rgba(87, 114, 255, 0.18) 0%, transparent 20%),
+    radial-gradient(circle at 76% 66%, rgba(189, 86, 255, 0.16) 0%, transparent 22%),
+    linear-gradient(180deg, #040510 0%, #090d20 100%);
+  animation: starDrift 22s ease-in-out infinite;
+}
+
+.effect-space .effect-bg-layer::before,
+.effect-preview-swatch.effect-space::before {
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 24% 72%, rgba(255, 255, 255, 0.16) 0 1.1%, transparent 1.8%),
+    radial-gradient(circle at 68% 16%, rgba(255, 255, 255, 0.16) 0 0.9%, transparent 1.5%),
+    radial-gradient(circle at 88% 48%, rgba(255, 255, 255, 0.12) 0 1.2%, transparent 1.7%);
+  background-size: 180px 180px, 220px 220px, 200px 200px;
+}
+
+.effect-space .effect-paper-layer::before {
+  opacity: 0.9;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(93, 117, 255, 0.08) 0%, transparent 18%),
+    radial-gradient(circle at 84% 74%, rgba(190, 97, 255, 0.08) 0%, transparent 20%),
+    radial-gradient(circle at 36% 82%, rgba(255, 255, 255, 0.16) 0 0.6%, transparent 1%);
+}
+
+.effect-vintage .effect-bg-layer,
+.effect-preview-swatch.effect-vintage {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(248, 223, 184, 0.16) 0%, transparent 24%),
+    linear-gradient(145deg, #8d5f44 0%, #4e3424 100%);
+}
+
+.effect-vintage .effect-bg-layer::before,
+.effect-preview-swatch.effect-vintage::before {
+  opacity: 0.9;
+  background:
+    repeating-radial-gradient(circle at center, rgba(255, 245, 214, 0.06) 0 1px, transparent 1px 18px),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, transparent 18%, transparent 82%, rgba(0, 0, 0, 0.22) 100%);
+}
+
+.effect-vintage .effect-bg-layer::after,
+.effect-preview-swatch.effect-vintage::after {
+  opacity: 0.62;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 46%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+.effect-vintage .effect-paper-layer::before {
+  opacity: 0.96;
+  background:
+    radial-gradient(circle at center, transparent 46%, rgba(103, 73, 50, 0.1) 100%),
+    linear-gradient(180deg, rgba(255, 236, 205, 0.12) 0%, transparent 18%);
+}
+
+.effect-futuristic .effect-bg-layer,
+.effect-preview-swatch.effect-futuristic {
+  background:
+    linear-gradient(180deg, #02060a 0%, #07161c 100%),
+    repeating-linear-gradient(90deg, rgba(0, 229, 255, 0.05) 0 1px, transparent 1px 34px);
+}
+
+.effect-futuristic .effect-bg-layer::before,
+.effect-preview-swatch.effect-futuristic::before {
+  opacity: 0.92;
+  background:
+    linear-gradient(180deg, transparent 0%, transparent 52%, rgba(0, 255, 247, 0.06) 52%, rgba(0, 255, 247, 0.12) 53%, transparent 54%, transparent 100%),
+    repeating-linear-gradient(0deg, rgba(0, 255, 247, 0.07) 0 1px, transparent 1px 28px);
+}
+
+.effect-futuristic .effect-bg-layer::after,
+.effect-preview-swatch.effect-futuristic::after {
+  opacity: 0.54;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 247, 0.22) 52%, transparent 100%);
+  animation: scanSweep 7s linear infinite;
+}
+
+.effect-futuristic .effect-paper-layer::before {
+  opacity: 0.94;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 255, 247, 0.06) 0 1px, transparent 1px 18px),
+    linear-gradient(90deg, rgba(0, 255, 247, 0.08) 0%, transparent 14%, transparent 86%, rgba(0, 255, 247, 0.08) 100%);
+}
+
+.effect-coffee-stain .effect-bg-layer,
+.effect-preview-swatch.effect-coffee-stain {
+  background:
+    radial-gradient(circle at 22% 20%, rgba(255, 240, 212, 0.18) 0%, transparent 18%),
+    linear-gradient(145deg, #6d4a34 0%, #452d20 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 18px);
+}
+
+.effect-coffee-stain .effect-bg-layer::before,
+.effect-preview-swatch.effect-coffee-stain::before {
+  opacity: 0.62;
+  background:
+    radial-gradient(circle at 80% 18%, rgba(0, 0, 0, 0.16) 0%, transparent 18%),
+    radial-gradient(circle at 18% 82%, rgba(255, 255, 255, 0.08) 0%, transparent 20%);
+}
+
+.effect-coffee-stain .effect-overlay-layer::before {
+  opacity: 0.76;
+  background:
+    radial-gradient(circle at 78% 16%, transparent 0 10.4%, rgba(108, 67, 38, 0.34) 10.8% 12.2%, transparent 13% 18%),
+    radial-gradient(circle at 84% 20%, transparent 0 5%, rgba(108, 67, 38, 0.24) 5.4% 6.2%, transparent 7.2% 11%),
+    radial-gradient(circle at 24% 76%, transparent 0 7.4%, rgba(128, 82, 51, 0.24) 7.8% 8.8%, transparent 9.4% 14%),
+    radial-gradient(circle at 22% 80%, rgba(120, 77, 47, 0.12) 0%, transparent 12%),
+    radial-gradient(circle at 80% 18%, rgba(120, 77, 47, 0.12) 0%, transparent 14%);
+  mix-blend-mode: multiply;
+}
+
+.effect-coffee-stain .effect-overlay-layer::after {
+  opacity: 0.5;
+  background:
+    linear-gradient(150deg, transparent 0%, transparent 64%, rgba(118, 73, 39, 0.18) 70%, transparent 76%),
+    radial-gradient(circle at 64% 32%, rgba(109, 70, 42, 0.18) 0 1.1%, transparent 1.7%),
+    radial-gradient(circle at 68% 36%, rgba(109, 70, 42, 0.16) 0 1.3%, transparent 1.9%),
+    radial-gradient(circle at 72% 42%, rgba(109, 70, 42, 0.16) 0 1%, transparent 1.6%),
+    radial-gradient(circle at 26% 84%, rgba(109, 70, 42, 0.14) 0 1.1%, transparent 1.6%);
+  mix-blend-mode: multiply;
+}
+
+.effect-coffee-stain .effect-paper-layer::before {
+  opacity: 0.94;
+  background:
+    radial-gradient(circle at 78% 16%, rgba(120, 77, 47, 0.06) 0%, transparent 14%),
+    radial-gradient(circle at 22% 80%, rgba(120, 77, 47, 0.05) 0%, transparent 12%),
+    linear-gradient(180deg, rgba(255, 235, 210, 0.1) 0%, transparent 22%, transparent 82%, rgba(160, 108, 70, 0.04) 100%);
+  mix-blend-mode: multiply;
+}
+
+.effect-crumpled .effect-bg-layer,
+.effect-preview-swatch.effect-crumpled {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.18) 0%, transparent 24%),
+    linear-gradient(180deg, #afb4bb 0%, #858b93 100%);
+}
+
+.effect-crumpled .effect-bg-layer::before,
+.effect-preview-swatch.effect-crumpled::before {
+  opacity: 0.84;
+  background:
+    linear-gradient(138deg, transparent 0 16%, rgba(255, 255, 255, 0.24) 16.4% 17%, transparent 17.6% 100%),
+    linear-gradient(44deg, transparent 0 34%, rgba(90, 96, 104, 0.22) 34.4% 35%, transparent 35.6% 100%),
+    linear-gradient(162deg, transparent 0 62%, rgba(255, 255, 255, 0.18) 62.4% 63%, transparent 63.6% 100%);
+}
+
+.effect-crumpled .effect-paper-layer {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(246, 244, 240, 0.98) 100%),
+    repeating-linear-gradient(52deg, rgba(0, 0, 0, 0.05) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(-58deg, rgba(255, 255, 255, 0.76) 0 1px, transparent 1px 46px),
+    radial-gradient(circle at 20% 72%, rgba(0, 0, 0, 0.05) 0%, transparent 28%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.68) 0%, transparent 22%);
+}
+
+.effect-crumpled .effect-paper-layer::before {
+  opacity: 0.9;
+  background:
+    linear-gradient(138deg, transparent 0 14%, rgba(255, 255, 255, 0.78) 14.4% 15%, rgba(120, 124, 132, 0.16) 15.4% 16%, transparent 16.5% 100%),
+    linear-gradient(44deg, transparent 0 32%, rgba(124, 128, 136, 0.12) 32.4% 33%, rgba(255, 255, 255, 0.72) 33.4% 34%, transparent 34.5% 100%),
+    linear-gradient(164deg, transparent 0 62%, rgba(255, 255, 255, 0.62) 62.4% 63%, rgba(114, 118, 126, 0.12) 63.4% 64%, transparent 64.4% 100%),
+    radial-gradient(circle at 22% 70%, rgba(0, 0, 0, 0.06) 0%, transparent 18%),
+    radial-gradient(circle at 82% 28%, rgba(255, 255, 255, 0.42) 0%, transparent 16%);
+}
+
+.effect-crumpled .effect-paper-layer::after {
+  opacity: 0.54;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%),
+    repeating-linear-gradient(52deg, rgba(0, 0, 0, 0.06) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(-58deg, rgba(255, 255, 255, 0.52) 0 1px, transparent 1px 38px);
+  mix-blend-mode: multiply;
+}
+
+.effect-grid .effect-bg-layer,
+.effect-preview-swatch.effect-grid {
+  background:
+    linear-gradient(180deg, #12161b 0%, #232a33 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 28px);
+}
+
+.effect-grid .effect-bg-layer::before,
+.effect-preview-swatch.effect-grid::before {
+  opacity: 0.46;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(255, 255, 255, 0.18) 0%, transparent 22%);
+}
+
+.effect-grid .effect-paper-layer::before {
+  opacity: 0.94;
+  background:
+    repeating-linear-gradient(0deg, rgba(35, 41, 50, 0.05) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(35, 41, 50, 0.05) 0 1px, transparent 1px 24px);
+}
+
+.effect-blueprint .effect-bg-layer,
+.effect-preview-swatch.effect-blueprint {
+  background:
+    linear-gradient(180deg, #0d4d7b 0%, #062c46 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 28px);
+}
+
+.effect-blueprint .effect-bg-layer::before,
+.effect-preview-swatch.effect-blueprint::before {
+  opacity: 0.62;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.18) 0 2px, transparent 2px 140px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0 2px, transparent 2px 140px);
+}
+
+.effect-blueprint .effect-paper-layer::before {
+  opacity: 0.96;
+  background:
+    repeating-linear-gradient(0deg, rgba(43, 92, 137, 0.08) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(43, 92, 137, 0.08) 0 1px, transparent 1px 22px);
+}
+
+.effect-blackboard .effect-bg-layer,
+.effect-preview-swatch.effect-blackboard {
+  background:
+    linear-gradient(180deg, #244539 0%, #182923 100%);
+}
+
+.effect-blackboard .effect-bg-layer::before,
+.effect-preview-swatch.effect-blackboard::before {
+  opacity: 0.84;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 20%),
+    radial-gradient(circle at 82% 72%, rgba(255, 255, 255, 0.06) 0%, transparent 24%),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 12px);
+  animation: chalkFloat 11s ease-in-out infinite;
+}
+
+.effect-blackboard .effect-paper-layer::before {
+  opacity: 0.88;
+  background:
+    radial-gradient(circle at 20% 24%, rgba(36, 69, 57, 0.08) 0%, transparent 16%),
+    radial-gradient(circle at 82% 76%, rgba(36, 69, 57, 0.08) 0%, transparent 16%);
+}
+
+.effect-none .effect-bg-layer,
+.effect-preview-swatch.effect-none {
+  background:
+    linear-gradient(180deg, #2a2a2a 0%, #323232 100%),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 22%);
+}
+
+.effect-preview-swatch.effect-hands {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.45) 0%, transparent 18%),
+    linear-gradient(180deg, #eef2f5 0%, #cfd7df 100%);
+}
+
+.effect-preview-swatch.effect-hands::before {
+  opacity: 1;
+  background:
+    linear-gradient(180deg, rgba(44, 53, 61, 0.82) 0 14%, transparent 15% 100%),
+    radial-gradient(circle at 16% 14%, rgba(231, 191, 160, 0.96) 0 10%, transparent 11%),
+    radial-gradient(circle at 84% 14%, rgba(231, 191, 160, 0.96) 0 10%, transparent 11%),
+    radial-gradient(circle at 18% 28%, rgba(120, 83, 58, 0.18) 0 14%, transparent 15%),
+    radial-gradient(circle at 82% 28%, rgba(120, 83, 58, 0.18) 0 14%, transparent 15%);
+}
+
+.effect-preview-swatch.effect-blood::after {
+  opacity: 0.92;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(128, 0, 0, 0.95) 0 11%, transparent 12%),
+    radial-gradient(circle at 76% 28%, rgba(170, 0, 20, 0.85) 0 8%, transparent 9%),
+    radial-gradient(circle at 58% 72%, rgba(110, 0, 0, 0.85) 0 13%, transparent 14%);
+  mix-blend-mode: screen;
+}
+
+.effect-preview-swatch.effect-marble::after {
+  opacity: 0.72;
+  background:
+    linear-gradient(128deg, transparent 0 26%, rgba(122, 131, 148, 0.54) 27% 29%, transparent 30% 54%, rgba(255, 255, 255, 0.9) 55% 56%, transparent 57% 100%),
+    linear-gradient(32deg, transparent 0 44%, rgba(145, 154, 166, 0.44) 45% 46%, transparent 47% 100%);
+}
+
+.effect-preview-swatch.effect-desk::after {
+  opacity: 0.94;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 214, 0.18) 0 12%, transparent 14% 100%),
+    linear-gradient(180deg, transparent 0 70%, rgba(0, 0, 0, 0.26) 72% 100%);
+}
+
+.effect-preview-swatch.effect-concrete::after {
+  opacity: 0.7;
+  background:
+    linear-gradient(132deg, transparent 0 48%, rgba(86, 90, 96, 0.42) 49% 50%, transparent 51% 100%),
+    linear-gradient(42deg, transparent 0 60%, rgba(255, 255, 255, 0.18) 61% 62%, transparent 63% 100%);
+}
+
+.effect-preview-swatch.effect-sand::after {
+  opacity: 0.82;
+  background:
+    linear-gradient(168deg, transparent 0 34%, rgba(255, 234, 181, 0.42) 35% 42%, transparent 44% 100%),
+    linear-gradient(12deg, transparent 0 62%, rgba(170, 119, 69, 0.3) 64% 72%, transparent 74% 100%);
+}
+
+.effect-preview-swatch.effect-water-drops::after {
+  opacity: 0.96;
+  background:
+    radial-gradient(circle at 26% 24%, rgba(255, 255, 255, 0.48) 0 6%, transparent 7%),
+    radial-gradient(circle at 72% 66%, rgba(255, 255, 255, 0.34) 0 7%, transparent 8%),
+    radial-gradient(circle at 76% 22%, rgba(255, 255, 255, 0.26) 0 4%, transparent 5%);
+}
+
+.effect-preview-swatch.effect-fire::after {
+  opacity: 0.94;
+  background:
+    radial-gradient(circle at 28% 100%, rgba(255, 156, 64, 0.85) 0 18%, transparent 20%),
+    radial-gradient(circle at 56% 100%, rgba(255, 94, 0, 0.86) 0 22%, transparent 24%),
+    radial-gradient(circle at 82% 100%, rgba(255, 200, 96, 0.74) 0 16%, transparent 18%);
+}
+
+.effect-preview-swatch.effect-ice::after {
+  opacity: 0.86;
+  background:
+    linear-gradient(132deg, transparent 0 44%, rgba(255, 255, 255, 0.92) 45% 47%, transparent 48% 100%),
+    linear-gradient(42deg, transparent 0 58%, rgba(182, 221, 235, 0.9) 59% 61%, transparent 62% 100%);
+}
+
+.effect-preview-swatch.effect-neon::after {
+  opacity: 0.94;
+  background:
+    linear-gradient(124deg, transparent 0 18%, rgba(0, 255, 240, 0.36) 22% 30%, transparent 34% 64%, rgba(255, 0, 122, 0.34) 68% 76%, transparent 80% 100%);
+}
+
+.effect-preview-swatch.effect-space::after {
+  opacity: 0.98;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.95) 0 2.4%, transparent 2.6%),
+    radial-gradient(circle at 68% 26%, rgba(255, 255, 255, 0.92) 0 1.9%, transparent 2.2%),
+    radial-gradient(circle at 78% 72%, rgba(255, 255, 255, 0.9) 0 2.1%, transparent 2.4%),
+    radial-gradient(circle at 36% 84%, rgba(255, 255, 255, 0.78) 0 1.8%, transparent 2.2%);
+}
+
+.effect-preview-swatch.effect-vintage::after {
+  opacity: 0.78;
+  background:
+    radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.36) 100%);
+}
+
+.effect-preview-swatch.effect-futuristic::after {
+  opacity: 0.96;
+  background:
+    linear-gradient(180deg, transparent 0 44%, rgba(0, 255, 247, 0.34) 46% 54%, transparent 56% 100%),
+    repeating-linear-gradient(90deg, rgba(0, 255, 247, 0.16) 0 1px, transparent 1px 12px);
+}
+
+.effect-preview-swatch.effect-coffee-stain::after {
+  opacity: 0.88;
+  background:
+    radial-gradient(circle at 72% 26%, transparent 0 16%, rgba(120, 78, 50, 0.62) 17% 20%, transparent 21% 100%);
+}
+
+.effect-preview-swatch.effect-crumpled::before {
+  opacity: 1;
+}
+
+.effect-preview-swatch.effect-crumpled::after {
+  opacity: 0.78;
+  background:
+    repeating-linear-gradient(52deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(-58deg, rgba(255, 255, 255, 0.54) 0 1px, transparent 1px 18px);
+}
+
+.effect-preview-swatch.effect-grid::after {
+  opacity: 0.72;
+  background:
+    linear-gradient(180deg, transparent 0 50%, rgba(255, 255, 255, 0.08) 100%);
+}
+
+.effect-preview-swatch.effect-blueprint::after {
+  opacity: 0.88;
+  background:
+    linear-gradient(180deg, transparent 0 58%, rgba(255, 255, 255, 0.14) 60% 61%, transparent 62% 100%),
+    linear-gradient(90deg, transparent 0 38%, rgba(255, 255, 255, 0.18) 40% 41%, transparent 42% 100%);
+}
+
+.effect-preview-swatch.effect-blackboard::after {
+  opacity: 0.84;
+  background:
+    linear-gradient(18deg, transparent 0 48%, rgba(255, 255, 255, 0.18) 49% 50%, transparent 51% 100%);
+}
+
+@media (max-width: 768px) {
+  .effect-hands .effect-overlay-layer::before,
+  .effect-hands .effect-overlay-layer::after {
+    top: 8%;
+    width: 16%;
+    height: 11%;
+  }
+
+  .effect-hands .effect-fg-layer::before,
+  .effect-hands .effect-fg-layer::after {
+    width: 26%;
+    height: 24%;
+    top: -3.5%;
+  }
+
+  .effect-hands .effect-fg-layer::before {
+    left: -6%;
+  }
+
+  .effect-hands .effect-fg-layer::after {
+    right: -6%;
+  }
+
+  .effect-blood .effect-overlay-layer::before {
+    width: 46%;
+    height: 24%;
+    left: -12%;
+  }
+
+  .effect-blood .effect-fg-layer::before {
+    width: 42%;
+    height: 24%;
+    right: -12%;
+  }
+
+  .effect-blood .effect-overlay-layer::after {
+    width: 38%;
+    height: 18%;
+    left: 24%;
+    bottom: -6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effect-bg-layer,
+  .effect-bg-layer::before,
+  .effect-bg-layer::after,
+  .effect-preview-swatch,
+  .effect-preview-swatch::before,
+  .effect-preview-swatch::after {
+    animation: none !important;
+  }
+}

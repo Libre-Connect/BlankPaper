@@ -1,0 +1,47 @@
+<svg width="840" height="620" viewBox="0 0 840 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bloodMain" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(332 210) rotate(90) scale(204 256)">
+      <stop offset="0" stop-color="#AE0E13"/>
+      <stop offset="0.42" stop-color="#7C0508"/>
+      <stop offset="1" stop-color="#380002"/>
+    </radialGradient>
+    <radialGradient id="bloodGloss" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(279 144) rotate(102) scale(112 186)">
+      <stop offset="0" stop-color="#F26A61" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#F26A61" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dripCore" x1="0" y1="286" x2="0" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8D090D"/>
+      <stop offset="1" stop-color="#420002"/>
+    </linearGradient>
+    <filter id="bloodShadow" x="0" y="0" width="840" height="620" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="0" dy="10"/>
+      <feGaussianBlur stdDeviation="12"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.172549 0 0 0 0 0 0 0 0 0 0.0117647 0 0 0 0.28 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+      <feGaussianBlur stdDeviation="1.6" result="effect2_foregroundBlur_1_1"/>
+    </filter>
+  </defs>
+  <g filter="url(#bloodShadow)">
+    <path d="M90 108C138 61 219 38 296 54C352 28 429 39 481 79C553 134 574 230 533 303C499 364 429 387 364 396C298 405 237 429 173 404C108 378 62 323 55 251C49 190 58 140 90 108Z" fill="url(#bloodMain)"/>
+    <path d="M157 71C182 49 217 45 244 61C264 73 272 95 263 116C255 135 235 147 210 148C184 149 162 138 150 119C139 101 142 83 157 71Z" fill="#84090D"/>
+    <path d="M537 130C560 125 583 138 593 160C603 183 596 208 576 220C557 233 532 230 515 214C497 197 492 172 503 153C510 141 521 133 537 130Z" fill="#6B0206"/>
+    <path d="M642 237C671 232 697 251 704 280C711 308 696 335 669 343C641 351 614 335 607 308C600 280 614 252 642 237Z" fill="#7E060A"/>
+    <path d="M97 306C118 296 145 301 161 319C176 337 177 363 163 381C150 398 124 405 102 398C79 390 63 370 64 348C64 329 76 313 97 306Z" fill="#640004"/>
+    <path d="M335 382C372 411 381 452 359 506C350 529 345 557 347 590H278C287 553 282 521 261 493C229 448 241 401 287 379C305 369 321 370 335 382Z" fill="url(#dripCore)"/>
+    <path d="M446 362C474 383 482 416 468 463C461 486 460 514 467 548H410C409 510 398 478 374 446C345 406 355 363 393 349C413 342 431 347 446 362Z" fill="url(#dripCore)"/>
+    <path d="M558 333C581 349 590 374 584 410C581 430 585 454 596 482H544C539 455 527 432 508 413C483 389 485 356 516 337C531 328 545 326 558 333Z" fill="url(#dripCore)"/>
+    <path d="M250 58C278 43 317 41 354 53C392 66 420 90 430 123C439 154 428 185 402 206C375 228 332 238 292 233C252 228 214 208 195 177C177 148 176 116 190 92C202 76 221 66 250 58Z" fill="url(#bloodGloss)"/>
+    <path d="M287 173C306 171 321 180 323 194C326 209 313 222 292 224C271 226 254 216 252 201C250 186 265 174 287 173Z" fill="#F7A39D" fill-opacity="0.18"/>
+    <circle cx="282" cy="169" r="28" fill="#A60B10"/>
+    <circle cx="357" cy="118" r="16" fill="#B41014"/>
+    <circle cx="418" cy="222" r="20" fill="#7A0206"/>
+    <circle cx="624" cy="182" r="12" fill="#930A0F"/>
+    <circle cx="164" cy="214" r="10" fill="#960B10"/>
+    <circle cx="598" cy="260" r="8" fill="#C71219"/>
+    <path d="M178 420C194 411 214 415 224 430C234 445 231 463 217 472C202 482 182 477 171 462C160 447 163 428 178 420Z" fill="#8B090D"/>
+  </g>
+</svg>
