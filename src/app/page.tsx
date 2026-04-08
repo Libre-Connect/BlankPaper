@@ -1,10 +1,10 @@
 'use client';
 
-import { CSSProperties, ChangeEvent, useEffect, useRef, useState } from 'react';
+import { CSSProperties, ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { AIResults } from '@/components/AIResults';
 import { AIGenerateModal } from '@/components/AIGenerateModal';
 import { AIGeneratedData, PaperLayoutMode, PaperModuleKey, PaperModuleTransform, WhitepaperEvent, WhitepaperMediaItem, WhitepaperNote } from '@/types';
-import { PenTool, Sparkles, Globe, KeyRound, Send, History, PlusCircle, Palette, Share2, ImagePlus, Mic, Square, Eye, X } from 'lucide-react';
+import { PenTool, Sparkles, Globe, KeyRound, Send, History, PlusCircle, Palette, Share2, ImagePlus, Mic, Square, Eye, X, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { savePaperToLocal, getPublicPapers, getPapersByCode, getUserPapers, hasPaperInLocal } from '@/utils/paperStorage';
 import { BACKGROUND_EFFECTS } from '@/utils/constants';
 import { prepareImageDataUrl } from '@/utils/imageUpload';
@@ -17,6 +17,61 @@ const DEFAULT_OBSERVATION_LENGTH = 3;
 const DEFAULT_BODY_LENGTH = 3;
 const DEFAULT_NOTE_TONES: WhitepaperNote['tone'][] = ['amber', 'blue', 'charcoal'];
 const DEFAULT_LOCALE: Locale = 'zh';
+
+type FloatingActionButtonProps = {
+  label: string;
+  title: string;
+  active?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+  tone?: 'default' | 'active' | 'dark' | 'danger';
+  labelClassName?: string;
+  children: ReactNode;
+};
+
+function FloatingActionButton({
+  label,
+  title,
+  active = false,
+  disabled = false,
+  onClick,
+  tone = 'default',
+  labelClassName = '',
+  children,
+}: FloatingActionButtonProps) {
+  const resolvedTone = tone === 'default' && active ? 'active' : tone;
+  const iconToneClass =
+    resolvedTone === 'dark'
+      ? 'bg-black text-white border-black shadow-[0_12px_28px_rgba(0,0,0,0.24)]'
+      : resolvedTone === 'danger'
+        ? 'bg-red-600 text-white border-red-600 shadow-[0_12px_28px_rgba(220,38,38,0.28)]'
+        : resolvedTone === 'active'
+          ? 'bg-black text-white border-black'
+          : 'bg-white/96 text-gray-900 border-white/14 group-hover:scale-110';
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      className="group flex w-[4.6rem] flex-col items-center gap-1.5 text-center disabled:cursor-not-allowed"
+    >
+      <span
+        className={`flex h-12 w-12 items-center justify-center rounded-full border shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all ${iconToneClass} ${
+          disabled ? 'opacity-45 group-hover:scale-100' : ''
+        }`}
+      >
+        {children}
+      </span>
+      <span
+        className={`text-[11px] leading-4 ${resolvedTone === 'default' ? 'text-white/76' : 'font-semibold text-white'} ${disabled ? 'opacity-45' : ''} ${labelClassName}`}
+      >
+        {label}
+      </span>
+    </button>
+  );
+}
 
 const getDefaultFactCardLabels = (locale: Locale) =>
   locale === 'en' ? ['Time', 'Place', 'People', 'Outcome'] : ['时间', '地点', '人物', '结果'];
@@ -333,6 +388,7 @@ export default function Home() {
   const [showBgSelector, setShowBgSelector] = useState(false);
   const [isPaperReadOnly, setIsPaperReadOnly] = useState(false);
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
+  const [isToolbarCollapsed, setIsToolbarCollapsed] = useState(false);
   const unlockTimerRef = useRef<number | null>(null);
   const toolbarImageInputRef = useRef<HTMLInputElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -1097,115 +1153,142 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="fixed bottom-8 left-8 flex gap-3 z-50" onClick={(event) => event.stopPropagation()}>
-          <button
-            onClick={() => {
-              setViewMode('write');
-              setIsFocused(true);
-            }}
-            className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border ${viewMode === 'write' ? 'bg-black text-white border-black' : 'bg-white text-gray-900 border-gray-100 hover:scale-110'}`}
-            title={tr('书写白纸', 'Write')}
+        <div
+          className="fixed bottom-6 left-6 z-50 flex items-end gap-3"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div
+            className={`overflow-hidden transition-[max-width,opacity,transform] duration-300 ease-out motion-reduce:transition-none ${
+              isToolbarCollapsed ? 'pointer-events-none max-w-0 translate-x-4 opacity-0' : 'max-w-[calc(100vw-7rem)] translate-x-0 opacity-100'
+            }`}
           >
-            <PenTool size={20} />
-          </button>
-          <button
-            onClick={handleViewSquare}
-            className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border ${viewMode === 'square' ? 'bg-black text-white border-black' : 'bg-white text-gray-900 border-gray-100 hover:scale-110'}`}
-            title={tr('白纸广场', 'Square')}
-          >
-            <Globe size={20} />
-          </button>
-          <button
-            onClick={handleViewSecret}
-            className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border ${viewMode === 'secret' ? 'bg-black text-white border-black' : 'bg-white text-gray-900 border-gray-100 hover:scale-110'}`}
-            title={tr('密令查看', 'Secret')}
-          >
-            <KeyRound size={20} />
-          </button>
-          <button
-            onClick={handleViewHistory}
-            className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border ${viewMode === 'history' ? 'bg-black text-white border-black' : 'bg-white text-gray-900 border-gray-100 hover:scale-110'}`}
-            title={tr('我的白纸记录', 'History')}
-          >
-            <History size={20} />
-          </button>
+            <div className="flex flex-wrap items-start gap-3">
+              <FloatingActionButton
+                onClick={() => {
+                  setViewMode('write');
+                  setIsFocused(true);
+                }}
+                active={viewMode === 'write'}
+                title={tr('书写白纸', 'Write')}
+                label={tr('书写', 'Write')}
+              >
+                <PenTool size={20} />
+              </FloatingActionButton>
+              <FloatingActionButton
+                onClick={handleViewSquare}
+                active={viewMode === 'square'}
+                title={tr('白纸广场', 'Square')}
+                label={tr('广场', 'Square')}
+              >
+                <Globe size={20} />
+              </FloatingActionButton>
+              <FloatingActionButton
+                onClick={handleViewSecret}
+                active={viewMode === 'secret'}
+                title={tr('密令查看', 'Secret')}
+                label={tr('密令', 'Secret')}
+              >
+                <KeyRound size={20} />
+              </FloatingActionButton>
+              <FloatingActionButton
+                onClick={handleViewHistory}
+                active={viewMode === 'history'}
+                title={tr('我的白纸记录', 'History')}
+                label={tr('记录', 'History')}
+              >
+                <History size={20} />
+              </FloatingActionButton>
 
-          {viewMode === 'write' && !isPaperReadOnly && (
-            <button
-              onClick={() => toolbarImageInputRef.current?.click()}
-              className="flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border bg-white text-gray-900 border-gray-100 hover:scale-110"
-              title={tr('添加图片到白纸', 'Add image to sheet')}
-            >
-              <ImagePlus size={18} />
-            </button>
-          )}
-
-          {viewMode === 'write' && !isPaperReadOnly && (
-            <button
-              onClick={() => void toggleAudioRecording()}
-              className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border ${
-                isRecordingAudio ? 'bg-red-600 text-white border-red-600 hover:scale-105' : 'bg-white text-gray-900 border-gray-100 hover:scale-110'
-              }`}
-              title={isRecordingAudio ? tr('结束录音并贴到白纸', 'Stop recording and pin it to the sheet') : tr('开始录音并贴到白纸', 'Start recording and pin it to the sheet')}
-            >
-              {isRecordingAudio ? <Square size={16} /> : <Mic size={18} />}
-            </button>
-          )}
-
-          {viewMode === 'write' && !isPaperReadOnly && (
-            <button
-              onClick={() => {
-                setShowBgSelector(false);
-                setShowAIModal(false);
-                setShowPreviewModal(true);
-              }}
-              className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border bg-white text-gray-900 border-gray-100 hover:scale-110 ${showPreviewModal ? 'ring-2 ring-black' : ''}`}
-              title={tr('预览白纸', 'Preview sheet')}
-            >
-              <Eye size={18} />
-            </button>
-          )}
-
-          {viewMode === 'write' && !isPaperReadOnly && (
-            <button
-              onClick={openAIModal}
-              disabled={isGenerating}
-              className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all ${isGenerating ? 'bg-black/40 text-white cursor-wait' : 'bg-black text-white hover:scale-110'}`}
-              title={tr('AI 生成白纸', 'Generate with AI')}
-            >
-              {isGenerating ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <Sparkles size={18} />
+              {viewMode === 'write' && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={() => toolbarImageInputRef.current?.click()}
+                  title={tr('添加图片到白纸', 'Add image to sheet')}
+                  label={tr('图片', 'Image')}
+                >
+                  <ImagePlus size={18} />
+                </FloatingActionButton>
               )}
-            </button>
-          )}
 
-          {viewMode === 'write' && hasContent && !isPaperReadOnly && (
-            <button
-              onClick={() => {
-                setShowBgSelector(false);
-                setShowPublishModal(true);
-              }}
-              className="flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all bg-white text-gray-900 border border-gray-100 hover:scale-110"
-              title={tr('发布白纸', 'Publish')}
-            >
-              <Send size={18} />
-            </button>
-          )}
+              {viewMode === 'write' && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={() => void toggleAudioRecording()}
+                  title={
+                    isRecordingAudio
+                      ? tr('结束录音并贴到白纸', 'Stop recording and pin it to the sheet')
+                      : tr('开始录音并贴到白纸', 'Start recording and pin it to the sheet')
+                  }
+                  label={isRecordingAudio ? tr('停录', 'Stop') : tr('录音', 'Audio')}
+                  tone={isRecordingAudio ? 'danger' : 'default'}
+                >
+                  {isRecordingAudio ? <Square size={16} /> : <Mic size={18} />}
+                </FloatingActionButton>
+              )}
 
-          {viewMode === 'write' && !isPaperReadOnly && (
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                setShowBgSelector((previous) => !previous);
-              }}
-              className={`flex items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all border bg-white text-gray-900 border-gray-100 hover:scale-110 ${showBgSelector ? 'ring-2 ring-black' : ''}`}
-              title={tr('设置背景特效', 'Background Effects')}
-            >
-              <Palette size={20} />
-            </button>
-          )}
+              {viewMode === 'write' && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={() => {
+                    setShowBgSelector(false);
+                    setShowAIModal(false);
+                    setShowPreviewModal(true);
+                  }}
+                  active={showPreviewModal}
+                  title={tr('预览白纸', 'Preview sheet')}
+                  label={tr('预览', 'Preview')}
+                >
+                  <Eye size={18} />
+                </FloatingActionButton>
+              )}
+
+              {viewMode === 'write' && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={openAIModal}
+                  disabled={isGenerating}
+                  title={tr('AI 生成白纸', 'Generate with AI')}
+                  label={tr('AI生成', 'AI')}
+                  tone="dark"
+                >
+                  {isGenerating ? (
+                    <div className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <Sparkles size={18} />
+                  )}
+                </FloatingActionButton>
+              )}
+
+              {viewMode === 'write' && hasContent && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={() => {
+                    setShowBgSelector(false);
+                    setShowPublishModal(true);
+                  }}
+                  title={tr('发布白纸', 'Publish')}
+                  label={tr('发布', 'Publish')}
+                >
+                  <Send size={18} />
+                </FloatingActionButton>
+              )}
+
+              {viewMode === 'write' && !isPaperReadOnly && (
+                <FloatingActionButton
+                  onClick={() => setShowBgSelector((previous) => !previous)}
+                  active={showBgSelector}
+                  title={tr('设置背景特效', 'Background Effects')}
+                  label={tr('背景', 'Effects')}
+                >
+                  <Palette size={20} />
+                </FloatingActionButton>
+              )}
+
+            </div>
+          </div>
+
+          <FloatingActionButton
+            onClick={() => setIsToolbarCollapsed((previous) => !previous)}
+            title={isToolbarCollapsed ? tr('展开底部工具栏', 'Expand toolbar') : tr('收起底部工具栏', 'Collapse toolbar')}
+            label={isToolbarCollapsed ? tr('展开', 'Open') : tr('收起', 'Hide')}
+          >
+            {isToolbarCollapsed ? <ChevronsRight size={18} /> : <ChevronsLeft size={18} />}
+          </FloatingActionButton>
         </div>
 
         {showPublishModal && (

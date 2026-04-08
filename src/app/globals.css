@@ -27,6 +27,10 @@ body {
   font-family: var(--font-geist-sans), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
+body nextjs-portal {
+  display: none !important;
+}
+
 .whitepaper-handwriting {
   font-family: var(--font-handwriting), "STKaiti", "KaiTi", cursive;
   letter-spacing: 0.02em;
@@ -1994,4 +1998,31 @@ body {
   .effect-preview-swatch::after {
     animation: none !important;
   }
+}
+
+.floatingchat-container-wrap,
+.floatingchat-container-wrap-mobi {
+  left: auto !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  width: 156px !important;
+  max-width: 156px !important;
+  height: 58px !important;
+  transform: scale(0.88);
+  transform-origin: bottom right;
+}
+
+.floatingchat-container,
+.floatingchat-container-mobi {
+  left: auto !important;
+  right: 0 !important;
+  width: 182px !important;
+}
+
+.floating-chat-kofi-popup-iframe,
+.floating-chat-kofi-popup-iframe-mobi {
+  left: auto !important;
+  right: 16px !important;
+  bottom: 74px !important;
+  transform-origin: bottom right;
 }

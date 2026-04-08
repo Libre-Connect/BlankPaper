@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Ma_Shan_Zheng } from "next/font/google";
+import { DonateWidget } from "@/components/DonateWidget";
+import logo from "@/logo.png";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,6 +23,11 @@ const maShanZheng = Ma_Shan_Zheng({
 export const metadata: Metadata = {
   title: "Blankpaper Generator / 白纸事件生成器",
   description: "Turn text, images, and audio into a crafted blankpaper scene.",
+  icons: {
+    icon: logo.src,
+    shortcut: logo.src,
+    apple: logo.src,
+  },
 };
 
 export default function RootLayout({
@@ -34,7 +41,10 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${maShanZheng.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <DonateWidget />
+      </body>
     </html>
   );
 }
