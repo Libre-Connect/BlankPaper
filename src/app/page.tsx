@@ -1223,6 +1223,17 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="fixed left-6 top-6 z-50" onClick={(event) => event.stopPropagation()}>
+          <button
+            type="button"
+            onClick={handleNewPaper}
+            className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/88 px-4 py-2 text-sm font-semibold text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur transition hover:bg-white"
+          >
+            <PlusCircle size={16} />
+            {tr('新建白纸', 'New Sheet')}
+          </button>
+        </div>
+
         <div className="fixed right-6 top-6 z-50" onClick={(event) => event.stopPropagation()}>
           <div className="inline-flex items-center rounded-full border border-black/10 bg-white/85 p-1 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur">
             <button
