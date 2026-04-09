@@ -1,0 +1,49 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1600" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A1C22"/>
+      <stop offset="1" stop-color="#262C36"/>
+    </linearGradient>
+    <linearGradient id="paper3" x1="240" y1="110" x2="1320" y2="850" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#F8F2E6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="980" rx="36" fill="url(#bg3)"/>
+  <rect x="252" y="118" width="1080" height="744" rx="32" fill="url(#paper3)"/>
+  <rect x="252.75" y="118.75" width="1078.5" height="742.5" rx="31.25" stroke="#E9DDC7" stroke-width="1.5"/>
+
+  <text x="330" y="214" fill="#181613" font-family="Arial, sans-serif" font-size="54" font-weight="700">A paper you can keep moving.</text>
+  <text x="330" y="266" fill="#766E62" font-family="Arial, sans-serif" font-size="28">Drag modules, pin images, place notes, add audio, and keep editing after AI writes the first version.</text>
+
+  <g transform="rotate(-4 470 446)">
+    <rect x="346" y="332" width="258" height="322" rx="26" fill="#FFFDF9"/>
+    <rect x="368" y="354" width="214" height="174" rx="20" fill="#C7AC8A"/>
+    <rect x="380" y="366" width="190" height="150" rx="18" fill="#8AA5B7"/>
+    <rect x="398" y="338" width="84" height="20" rx="6" fill="#E9D082" opacity="0.75"/>
+    <text x="386" y="572" fill="#2B241D" font-family="KaiTi, STKaiti, serif" font-size="30">图片可以拖、换、删。</text>
+  </g>
+
+  <g transform="rotate(2 958 408)">
+    <rect x="744" y="314" width="430" height="222" rx="26" fill="#FBF7ED" stroke="#E4D7BE" stroke-width="2"/>
+    <text x="780" y="388" fill="#23201B" font-family="KaiTi, STKaiti, serif" font-size="40">风景很安静，心里却不是来赏景的。</text>
+    <text x="780" y="450" fill="#23201B" font-family="KaiTi, STKaiti, serif" font-size="40">越是晚霞温软，越衬得那句话来得硬。</text>
+    <text x="780" y="498" fill="#908474" font-family="Arial, sans-serif" font-size="22">Lead / Body blocks can be moved and resized by layout mode.</text>
+  </g>
+
+  <g transform="rotate(-6 1128 660)">
+    <rect x="1028" y="590" width="246" height="172" rx="26" fill="#FFF8D9"/>
+    <text x="1060" y="650" fill="#2B251D" font-family="KaiTi, STKaiti, serif" font-size="34">有些判断拖得再久，</text>
+    <text x="1060" y="700" fill="#2B251D" font-family="KaiTi, STKaiti, serif" font-size="34">也不会因为沉默就变样。</text>
+  </g>
+
+  <g>
+    <rect x="670" y="632" width="260" height="94" rx="22" fill="#111216"/>
+    <circle cx="720" cy="679" r="16" fill="#FFFDF8"/>
+    <rect x="748" y="663" width="138" height="12" rx="6" fill="#FFFDF8"/>
+    <rect x="748" y="689" width="106" height="10" rx="5" fill="#A6ABB3"/>
+  </g>
+
+  <text x="330" y="798" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="34" font-weight="700">自由排版 · 手写体 · 图片 · 录音 · AI 起稿后继续改</text>
+</svg>

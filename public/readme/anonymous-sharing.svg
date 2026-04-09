@@ -1,0 +1,41 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBF5E8"/>
+      <stop offset="1" stop-color="#F2E7D3"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="340" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#FBF5EA"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" rx="36" fill="url(#bg2)"/>
+
+  <text x="100" y="134" fill="#171513" font-family="Arial, sans-serif" font-size="60" font-weight="700">Share freely, stay anonymous.</text>
+  <text x="100" y="194" fill="#6F675C" font-family="Arial, sans-serif" font-size="28">No public usernames, no profile pages, no follower layer. Just papers, codes, and quiet circulation.</text>
+
+  <rect x="100" y="286" width="420" height="360" rx="32" fill="url(#card)" stroke="#E7D9C1" stroke-width="2"/>
+  <circle cx="168" cy="358" r="32" fill="#111216"/>
+  <text x="226" y="372" fill="#171513" font-family="Arial, sans-serif" font-size="36" font-weight="700">Public Square</text>
+  <text x="148" y="438" fill="#6E675D" font-family="Arial, sans-serif" font-size="25">A rotating batch of papers from the server.</text>
+  <text x="148" y="484" fill="#2A241E" font-family="KaiTi, STKaiti, serif" font-size="34">公开展示的是纸，不是人。</text>
+  <rect x="148" y="534" width="322" height="62" rx="18" fill="#F3E8D3"/>
+  <text x="176" y="576" fill="#463E34" font-family="Arial, sans-serif" font-size="28">Random, quiet, browseable.</text>
+
+  <rect x="590" y="286" width="420" height="360" rx="32" fill="url(#card)" stroke="#E7D9C1" stroke-width="2"/>
+  <rect x="638" y="334" width="72" height="72" rx="20" fill="#111216"/>
+  <text x="742" y="372" fill="#171513" font-family="Arial, sans-serif" font-size="36" font-weight="700">Secret Code</text>
+  <text x="638" y="438" fill="#6E675D" font-family="Arial, sans-serif" font-size="25">Share a code when the paper should stay semi-private.</text>
+  <text x="638" y="484" fill="#2A241E" font-family="KaiTi, STKaiti, serif" font-size="34">知道密令的人，才会看到这张纸。</text>
+  <rect x="638" y="534" width="158" height="62" rx="18" fill="#111216"/>
+  <text x="676" y="576" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="700">A9KM-72</text>
+
+  <rect x="1080" y="286" width="420" height="360" rx="32" fill="url(#card)" stroke="#E7D9C1" stroke-width="2"/>
+  <circle cx="1148" cy="358" r="32" fill="#111216"/>
+  <circle cx="1148" cy="358" r="12" fill="#FFFDF8"/>
+  <text x="1206" y="372" fill="#171513" font-family="Arial, sans-serif" font-size="36" font-weight="700">Anonymous by default</text>
+  <text x="1128" y="438" fill="#6E675D" font-family="Arial, sans-serif" font-size="25">Each browser keeps an invisible anonymous identity.</text>
+  <text x="1128" y="484" fill="#2A241E" font-family="KaiTi, STKaiti, serif" font-size="34">可以有“我的历史”，但不会出现用户名。</text>
+  <rect x="1128" y="534" width="292" height="62" rx="18" fill="#F3E8D3"/>
+  <text x="1156" y="576" fill="#463E34" font-family="Arial, sans-serif" font-size="28">No public profile layer.</text>
+</svg>

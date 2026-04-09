@@ -1,0 +1,61 @@
+<svg width="1600" height="960" viewBox="0 0 1600 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1460" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F1014"/>
+      <stop offset="1" stop-color="#222632"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1150 170) rotate(120) scale(520 720)">
+      <stop stop-color="#FFF4D8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFF4D8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="312" y1="144" x2="1288" y2="840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#F8F3E7"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="310" y1="170" x2="1250" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="960" rx="36" fill="url(#bg)"/>
+  <rect width="1600" height="960" rx="36" fill="url(#glow)"/>
+
+  <circle cx="170" cy="128" r="3" fill="#3A404C"/>
+  <circle cx="230" cy="128" r="3" fill="#3A404C"/>
+  <circle cx="290" cy="128" r="3" fill="#3A404C"/>
+  <circle cx="1350" cy="812" r="3" fill="#3A404C"/>
+  <circle cx="1410" cy="812" r="3" fill="#3A404C"/>
+
+  <rect x="286" y="166" width="1024" height="680" rx="28" fill="url(#shadow)" opacity="0.62"/>
+  <g transform="rotate(-2 800 480)">
+    <rect x="300" y="136" width="1000" height="700" rx="28" fill="url(#paper)"/>
+    <rect x="300.75" y="136.75" width="998.5" height="698.5" rx="27.25" stroke="#E8DEC8" stroke-width="1.5"/>
+    <rect x="390" y="206" width="182" height="18" rx="9" fill="#EFE6D5"/>
+    <text x="390" y="286" fill="#181716" font-family="Georgia, serif" font-size="86" font-weight="700">白纸，不只是文档。</text>
+    <text x="390" y="340" fill="#706A61" font-family="Arial, sans-serif" font-size="27">Write, generate, pin, drag, and share one anonymous paper at a time.</text>
+
+    <text x="390" y="432" fill="#23201C" font-family="KaiTi, STKaiti, serif" font-size="50">我想把一些事情留下来，</text>
+    <text x="390" y="500" fill="#23201C" font-family="KaiTi, STKaiti, serif" font-size="50">不做成海报，也不藏进表格。</text>
+    <text x="390" y="568" fill="#23201C" font-family="KaiTi, STKaiti, serif" font-size="50">只把它写在一张纸上，</text>
+    <text x="390" y="636" fill="#23201C" font-family="KaiTi, STKaiti, serif" font-size="50">然后匿名地分享给该看到的人。</text>
+
+    <rect x="948" y="278" width="228" height="286" rx="28" fill="#FFFDF9"/>
+    <rect x="967" y="298" width="190" height="164" rx="22" fill="#D5B690"/>
+    <rect x="980" y="312" width="164" height="136" rx="18" fill="#8DA4B7"/>
+    <rect x="1006" y="288" width="82" height="18" rx="6" fill="#EFD58F" opacity="0.7"/>
+    <text x="978" y="504" fill="#464038" font-family="KaiTi, STKaiti, serif" font-size="30">贴一张图，</text>
+    <text x="978" y="542" fill="#464038" font-family="KaiTi, STKaiti, serif" font-size="30">留一段现场。</text>
+
+    <rect x="928" y="598" width="270" height="108" rx="24" fill="#FBF6EA" stroke="#E6DAC2" stroke-width="2"/>
+    <text x="956" y="644" fill="#8B826F" font-family="Arial, sans-serif" font-size="24">匿名 · 可分享 · 可继续编辑</text>
+    <text x="956" y="684" fill="#292520" font-family="Arial, sans-serif" font-size="34" font-weight="700">Public / Secret / History</text>
+  </g>
+
+  <g>
+    <rect x="170" y="734" width="94" height="94" rx="47" fill="#111216" stroke="#2D313A" stroke-width="2"/>
+    <path d="M210 770H224C237.255 770 248 780.745 248 794V794C248 807.255 237.255 818 224 818H210C196.745 818 186 807.255 186 794V794C186 780.745 196.745 770 210 770Z" fill="#F7F2E8"/>
+    <text x="296" y="782" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="700">BlankPaper</text>
+    <text x="296" y="822" fill="#9CA2AE" font-family="Arial, sans-serif" font-size="24">OpenAI official-route edition for self-hosted anonymous sharing.</text>
+  </g>
+</svg>
