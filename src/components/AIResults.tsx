@@ -1687,7 +1687,7 @@ export function AIResults({
 
                 <div className="flex flex-col gap-5">
                   {handwrittenBody.map((paragraph, index) => (
-                    <div key={`${index}-${paragraph}`} className="flex flex-col gap-2">
+                    <div key={`body-${index}`} className="flex flex-col gap-2">
                       <EditableText
                         editable={editable}
                         value={paragraph}
@@ -2575,7 +2575,7 @@ export function AIResults({
             </div>
             <div className="flex flex-col gap-3">
               {observations.map((observation, index) => (
-                <div key={`${index}-${observation}`} className="flex flex-col gap-2">
+                <div key={`observation-${index}`} className="flex flex-col gap-2">
                   <EditableText
                     editable={editable}
                     value={observation}
